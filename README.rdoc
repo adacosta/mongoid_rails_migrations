@@ -12,7 +12,7 @@
 == INSTALL
 * gem install mongoid_rails_migrations
 * In your Gemfile, include:
-  gem "mongoid_rails_migrations", ">=0.0.1" # or whatever the current version happens to be
+  gem "mongoid_rails_migrations", ">=0.0.2" # or whatever the current version happens to be
 
 == FEATURES AND HOW TO USE
 * generator:
@@ -23,12 +23,11 @@
   * db:migrate:down
   * db:migrate:up
   * db:rollback
-
-* migrations (untested):
   * db:migrate:redo
   * db:migrate:reset
-  * db:reseed (might be covered by mongoid)
+  * db:reseed (handled by mongoid)
+  * db:version (added to glean current migration)
 
 == NOTES
-* Currently, only timestamp generated migrations have been tested, but you should be able to toggle the value of Mongoid.timestamped_migrations to auto generate likewise migrations.
+* Currently, only timestamp generated migrations have been tested, but you should be able to toggle the value of Mongoid.timestamped_migrations to auto generate migrations by type.
 * Only tested with ruby 1.9.1
