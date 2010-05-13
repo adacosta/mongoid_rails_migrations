@@ -1,15 +1,15 @@
 require 'rails/generators/migration'
-# require 'mongoid/rails/generators/mongoid/mongoid_generator'
 
 module Mongoid #:nodoc:
   module Generators #:nodoc:
     class Base < ::Rails::Generators::NamedBase #:nodoc:
-    include Rails::Generators::Migration
+      include Rails::Generators::Migration
 
-    def self.source_root
-      @_mongoid_source_root ||=
-      File.expand_path("../../#{base_name}/#{generator_name}/templates", __FILE__)
-    end
+      # A simple redef is fine because rails caches this path on class.inherited
+      # mongoid uses @_mongoid_source_root ||=, but that's not necessary
+      def self.source_root
+        File.expand_path("../../#{base_name}/#{generator_name}/templates", __FILE__)
+      end
       
       # Implement the required interface for Rails::Generators::Migration.
       def self.next_migration_number(dirname) #:nodoc:
@@ -20,6 +20,7 @@ module Mongoid #:nodoc:
           "%.3d" % next_migration_number
         end
       end
+      
     end
 	end
 end
