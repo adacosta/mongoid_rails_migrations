@@ -5,6 +5,10 @@
 * You need to rearrange or split data
 * You have model instances which you leverage as schema data
 
+== REQUIREMENTS
+* rails 3.0.0.beta3 ( should be cake updating for rails 3 final )
+* mongoid
+
 == INSTALL
 * gem install mongoid_rails_migrations
 * In your Gemfile, include:
