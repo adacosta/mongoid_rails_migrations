@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.test_files    = Dir['test/**/*']
   s.has_rdoc      = false
   
-	rails_version = '3.0.0.beta3'
+	rails_version = '>= 3.0.0.beta3'
 	
   s.add_dependency('bundler', '>= 0.9.19')
 	s.add_dependency('mongoid', '2.0.0.beta4')
