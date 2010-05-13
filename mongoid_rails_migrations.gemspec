@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.author            = 'Alan Da Costa'
   s.email             = 'alandacosta@gmail.com.com'
   s.date              = %q{2010-05-12}
-  # s.homepage          = ''
+  s.homepage          = 'http://github.com/adacosta/mongoid_rails_migrations'
   
   s.require_paths = ["lib"]
   s.files         = Dir['.gitignore', 'Gemfile', 'Rakefile', 'README.rdoc', 'mongoid_rails_migrations.gemspec', 'VERSION', 'lib/**/*']
