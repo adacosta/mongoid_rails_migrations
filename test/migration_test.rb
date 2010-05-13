@@ -12,21 +12,26 @@ end
 
 module Mongoid
   class TestCase < ActiveSupport::TestCase #:nodoc:
-    
+
     def setup
       Mongoid::Migration.verbose = true
     end
 
     def teardown
       Mongoid.master.collections.each(&:drop)
-    end    
-    
+    end
+
     def test_finds_migrations
       assert Mongoid::Migrator.new(:up, MIGRATIONS_ROOT + "/valid").migrations.size == 2
-      
+
       assert_equal 2, Mongoid::Migrator.new(:up, MIGRATIONS_ROOT + "/valid").pending_migrations.size
     end
-    
+
+    def test_migrator_current_version
+      Mongoid::Migrator.migrate(MIGRATIONS_ROOT + "/valid", 20100513054656)
+      assert_equal(20100513054656, Mongoid::Migrator.current_version)
+    end
+
     def test_migrator
       assert SurveySchema.first.nil?
 
@@ -37,31 +42,31 @@ module Mongoid
 
       Mongoid::Migrator.down(MIGRATIONS_ROOT + "/valid")
       assert_equal 0, Mongoid::Migrator.current_version
-      
+
       assert SurveySchema.create(:label => 'Questionable Survey')
       assert_equal 1, SurveySchema.all.size
     end
-    
+
     def test_migrator_two_up_and_one_down
       assert SurveySchema.where(:label => 'Baseline Survey').first.nil?
       assert_equal 0, SurveySchema.all.size
 
       Mongoid::Migrator.up(MIGRATIONS_ROOT + "/valid", 20100513054656)
-      
+
       assert !SurveySchema.where(:label => 'Baseline Survey').first.nil?
       assert_equal 1, SurveySchema.all.size
 
       assert SurveySchema.where(:label => 'Improvement Plan Survey').first.nil?
-      
+
       Mongoid::Migrator.up(MIGRATIONS_ROOT + "/valid", 20100513063902)
       assert_equal 20100513063902, Mongoid::Migrator.current_version
-      
+
       assert !SurveySchema.where(:label => 'Improvement Plan Survey').first.nil?
       assert_equal 2, SurveySchema.all.size
 
       Mongoid::Migrator.down(MIGRATIONS_ROOT + "/valid", 20100513054656)
       assert_equal 20100513054656, Mongoid::Migrator.current_version
-      
+
       assert SurveySchema.where(:label => 'Improvement Plan Survey').first.nil?
       assert !SurveySchema.where(:label => 'Baseline Survey').first.nil?
       assert_equal 1, SurveySchema.all.size
@@ -75,7 +80,7 @@ module Mongoid
       assert_equal pending_migrations[0].version, 20100513063902
       assert_equal pending_migrations[0].name, 'AddImprovementPlanSurveySchema'
     end
-    
+
     def test_migrator_rollback
       Mongoid::Migrator.migrate(MIGRATIONS_ROOT + "/valid")
       assert_equal(20100513063902, Mongoid::Migrator.current_version)
@@ -86,7 +91,7 @@ module Mongoid
       Mongoid::Migrator.rollback(MIGRATIONS_ROOT + "/valid")
       assert_equal(0, Mongoid::Migrator.current_version)
     end
-    
+
     def test_migrator_forward
       Mongoid::Migrator.migrate(MIGRATIONS_ROOT + "/valid", 20100513054656)
       assert_equal(20100513054656, Mongoid::Migrator.current_version)
@@ -94,19 +99,19 @@ module Mongoid
       Mongoid::Migrator.forward(MIGRATIONS_ROOT + "/valid", 20100513063902)
       assert_equal(20100513063902, Mongoid::Migrator.current_version)
     end
-    
+
     def test_migrator_with_duplicate_names
       assert_raise(Mongoid::DuplicateMigrationNameError) do
         Mongoid::Migrator.migrate(MIGRATIONS_ROOT + "/duplicate/names", nil)
       end
     end
-    
+
     def test_migrator_with_duplicate_versions
       assert_raise(Mongoid::DuplicateMigrationVersionError) do
         Mongoid::Migrator.migrate(MIGRATIONS_ROOT + "/duplicate/versions", nil)
       end
     end
-    
+
     def test_migrator_with_missing_version_numbers
       assert_raise(Mongoid::UnknownMigrationVersionError) do
         Mongoid::Migrator.migrate(MIGRATIONS_ROOT + "/valid", 500)
@@ -115,5 +120,3 @@ module Mongoid
 
   end
 end
-
-# migrations = ActiveRecord::Migrator.new(:up, MIGRATIONS_ROOT + "/interleaved/pass_2").pending_migrations

@@ -20,6 +20,11 @@ namespace :db do
   task :create => :environment do
     # noop
   end
+  
+  desc 'Current database version'
+  task :version => :environment do
+    puts Mongoid::Migrator.current_version.to_s
+  end
 
   desc "Migrate the database through scripts in db/migrate. Target specific version with VERSION=x. Turn off output with VERBOSE=false."
   task :migrate => :environment do
