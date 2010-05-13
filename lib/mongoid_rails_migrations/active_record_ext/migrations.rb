@@ -1,8 +1,6 @@
 # encoding: utf-8
-# require 'mongoid_rails_migrations'
-# require 'active_support/core_ext/kernel/singleton_class'
 
-module Mongoid
+module Mongoid #:nodoc
   # Exception that can be raised to stop migrations from going backwards.
   class IrreversibleMigration < RuntimeError
   end
