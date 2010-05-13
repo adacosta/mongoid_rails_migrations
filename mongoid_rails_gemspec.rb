@@ -2,7 +2,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'mongoid_rails_migrations'
   s.version     = '0.0.1'
-  s.summary     = 'Data migrations for Mongoid.'
+  s.summary     = 'Data migrations for Mongoid in Active Record style, minus column input.'
   s.description = 'Sometimes you just need to migrate data.'
 
   # only tested with 1.9.1, but let's go for it
@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.email             = 'alandacosta@gmail.com.com'
   # s.homepage          = ''
   
-  s.files        = Dir['Gemfile', 'README', 'VERSION', 'lib/**/*']
+  s.files        = Dir['Gemfile', 'Rakefile', 'README.rdoc', 'VERSION', 'lib/**/*', 'test/**/*']
   s.require_path = 'lib'
 
 	rails_version = '3.0.0.beta3'
