@@ -1,6 +1,6 @@
 # encoding: utf-8
-require 'mongoid_rails_migrations'
-require 'active_support/core_ext/kernel/singleton_class'
+# require 'mongoid_rails_migrations'
+# require 'active_support/core_ext/kernel/singleton_class'
 
 module Mongoid
   # Exception that can be raised to stop migrations from going backwards.

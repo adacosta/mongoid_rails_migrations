@@ -1,5 +1,5 @@
 # encoding: utf-8
-require 'mongoid/railtie'
+# require 'mongoid/railtie'
 
 if defined?(Rails::Railtie)
   module Rails #:nodoc:
