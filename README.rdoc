@@ -1,0 +1,30 @@
+== SYNOPSIS
+* Data migrations for Mongoid in Active Record style, minus column input. This allows for up and down migration methods.
+
+== MIGRATE WHEN ...
+* You need to rearrange or split data
+* You have model instances which you leverage as schema data
+
+== INSTALL
+* gem install mongoid_rails_migrations
+* In your Gemfile, include:
+  gem "mongoid_rails_migrations", ">=0.0.1" # or whatever the current version happens to be
+
+== FEATURES AND HOW TO USE
+* generator:
+  * rails generate mongoid:migration your_migration_name_here
+
+* migrations (tested):
+  * db:migrate
+  * db:migrate:down
+  * db:migrate:up
+  * db:rollback
+
+* migrations (untested):
+  * db:migrate:redo
+  * db:migrate:reset
+  * db:reseed (might be covered by mongoid)
+
+== NOTES
+* Currently, only timestamp generated migrations have been tested, but you should be able to toggle the value of Mongoid.timestamped_migrations to auto generate likewise migrations.
+* Only tested with ruby 1.9.1
