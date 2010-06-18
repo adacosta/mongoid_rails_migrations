@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/../lib/mongoid_rails_migrations'
+require File.dirname(__FILE__) + '/../lib/rails/generators/mongoid/mongoid_generator'
 
 Mongoid.configure do |config|
   name = "mongoid_test"
