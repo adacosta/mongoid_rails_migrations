@@ -18,12 +18,11 @@ module Mongoid
     end
 
     def teardown
-      Mongoid.master.collections.each(&:drop)
+      Mongoid.master.collections.reject { |c| c.name == 'system.indexes' }.each(&:drop)
     end
 
     def test_finds_migrations
       assert Mongoid::Migrator.new(:up, MIGRATIONS_ROOT + "/valid").migrations.size == 2
-
       assert_equal 2, Mongoid::Migrator.new(:up, MIGRATIONS_ROOT + "/valid").pending_migrations.size
     end
 
