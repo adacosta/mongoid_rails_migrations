@@ -1,8 +1,7 @@
 namespace :db do
-
   desc 'Drops all the collections for the database for the current Rails.env'
   task :drop => :environment do
-    Mongoid.master.collections.each{|col| col.drop unless col.name == 'system.users' }
+    Mongoid.master.collections.each {|col| col.drop_indexes && col.drop unless ['system.indexes', 'system.users'].include?(col.name) }
   end
 
   desc 'Load the seed data from db/seeds.rb'

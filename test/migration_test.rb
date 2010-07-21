@@ -15,10 +15,14 @@ module Mongoid
 
     def setup
       Mongoid::Migration.verbose = true
+      # same as db:drop command in lib/mongoid_rails_migrations/mongoid_ext/railties/database.rake
+      Mongoid.master.collections.each {|col| col.drop_indexes && col.drop unless ['system.indexes', 'system.users'].include?(col.name) }
     end
 
-    def teardown
-      Mongoid.master.collections.reject { |c| c.name == 'system.indexes' }.each(&:drop)
+    def teardown; end
+
+    def test_drop_works
+      assert_equal 0, Mongoid::Migrator.current_version, "db:drop should take us down to version 0"
     end
 
     def test_finds_migrations
@@ -32,7 +36,7 @@ module Mongoid
     end
 
     def test_migrator
-      assert SurveySchema.first.nil?
+      assert SurveySchema.first.nil?, "All SurveySchemas should be clear before migration run"
 
       Mongoid::Migrator.up(MIGRATIONS_ROOT + "/valid")
 
@@ -116,12 +120,21 @@ module Mongoid
         Mongoid::Migrator.migrate(MIGRATIONS_ROOT + "/valid", 500)
       end
     end
-    
+
+    def test_default_state_of_timestamped_migrations
+      assert Mongoid.config.timestamped_migrations, "Mongoid.config.timestamped_migrations should default to true"
+    end
+
+    def test_timestamped_migrations_generates_non_sequential_next_number
+      next_number = Mongoid::Generators::Base.next_migration_number(MIGRATIONS_ROOT + "/valid")
+      assert_not_equal "20100513063903", next_number
+    end
+
     def test_turning_off_timestamped_migrations
       Mongoid.config.timestamped_migrations = false
       next_number = Mongoid::Generators::Base.next_migration_number(MIGRATIONS_ROOT + "/valid")
       assert_equal "20100513063903", next_number
     end
-    
+
   end
 end
