@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'mongoid_rails_migrations'
-  s.version     = '0.0.6'
+  s.version     = '0.0.7'
   s.summary     = 'Data migrations for Mongoid in Active Record style, minus column input.'
   s.description = 'Sometimes you just need to migrate data.'
 
@@ -19,10 +19,10 @@ Gem::Specification.new do |s|
   s.test_files    = Dir['test/**/*']
   s.has_rdoc      = false
   
-	rails_version = '>= 3.0.0.beta3'
+	rails_version = '~> 3.0.0'
 	
   s.add_dependency('bundler', '>= 0.9.19')
-	s.add_dependency('mongoid', '>=2.0.0.beta.4')
+	s.add_dependency('mongoid', '~> 2.0.0.beta.17')
   s.add_dependency('rails',  rails_version)
   s.add_dependency('railties',  rails_version)
   s.add_dependency('activesupport',  rails_version)
