@@ -27,7 +27,7 @@ module TestMongoidRailsMigrations
 end
 
 # TestMongoidRailsMigrations::Application.initialize!
-Rails::Application.load_tasks
+TestMongoidRailsMigrations::Application.load_tasks
 
 # test overrides (dummy path); Rails is really looking for the app environment.rb
 Rails.configuration.paths.config.environment = 'test/config.rb'
