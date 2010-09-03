@@ -6,8 +6,8 @@
 * You have model instances which you leverage as schema data
 
 == REQUIREMENTS
-* rails 3.0.0.beta3 ( should be cake updating for rails 3 final )
-* mongoid
+* rails ~> 3.0.0
+* mongoid ~> 2.0.0.beta.17
 
 == INSTALL
 * gem install mongoid_rails_migrations
@@ -29,7 +29,6 @@
   * db:version (added to glean current migration)
 
 == NOTES
-* Currently, only timestamp generated migrations have been tested, but you should be able to toggle the value of Mongoid.timestamped_migrations to auto generate migrations by type (timestamp vs. auto incrementing).
 * Only tested with ruby 1.9.1
 
 == CREDITS TO
