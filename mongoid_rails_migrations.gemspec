@@ -13,17 +13,13 @@ Gem::Specification.new do |s|
   s.email             = 'alandacosta@gmail.com.com'
   s.date              = %q{2010-05-12}
   s.homepage          = 'http://github.com/adacosta/mongoid_rails_migrations'
-  
+
   s.require_paths = ["lib"]
-  s.files         = Dir['.gitignore', 'Gemfile', 'Rakefile', 'README.rdoc', 'mongoid_rails_migrations.gemspec', 'VERSION', 'lib/**/*']
+  s.files         = Dir['Gemfile', 'Gemfile.lock', 'Rakefile', 'README.rdoc', 'VERSION', 'lib/**/*']
   s.test_files    = Dir['test/**/*']
   s.has_rdoc      = false
-  
-	rails_version = '~> 3.0.0'
-	
-  s.add_dependency('bundler', '>= 0.9.19')
-	s.add_dependency('mongoid', '~> 2.0.0.beta.17')
-  s.add_dependency('rails',  rails_version)
-  s.add_dependency('railties',  rails_version)
-  s.add_dependency('activesupport',  rails_version)
+
+  s.add_dependency 'mongoid', '~> 2.0.0.beta.17'
+  s.add_dependency 'rails', '~> 3.0.0'
+  s.add_development_dependency 'bundler', '~> 1.0.0'
 end

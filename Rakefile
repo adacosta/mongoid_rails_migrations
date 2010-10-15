@@ -1,12 +1,9 @@
-$:.unshift(File.dirname(__FILE__))
+require 'rake/testtask'
 
-require File.dirname(__FILE__) + "/test/config"
+task :default => :test
 
-namespace :test do
-  namespace :mongoid do
-    desc "Test mongoid rails migrations"
-    task :migrations do
-      require 'test/migration_test'
-    end
-  end
+Rake::TestTask.new do |t|
+  t.libs << "test"
+  t.pattern = 'test/**/*_test.rb'
+  t.verbose = true
 end
