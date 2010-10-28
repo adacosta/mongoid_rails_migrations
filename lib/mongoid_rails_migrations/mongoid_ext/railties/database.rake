@@ -1,10 +1,12 @@
 namespace :db do
-  desc 'Drops all the collections for the database for the current Rails.env'
-  task :drop => :environment do
-    Mongoid.master.collections.each {|col| col.drop_indexes && col.drop unless ['system.indexes', 'system.users'].include?(col.name) }
+  unless Rake::Task.task_defined?("db:drop")
+    desc 'Drops all the collections for the database for the current Rails.env'
+    task :drop => :environment do
+      Mongoid.master.collections.each {|col| col.drop_indexes && col.drop unless ['system.indexes', 'system.users'].include?(col.name) }
+    end
   end
 
-  if not Rake::Task.task_defined?("db:seed")
+  unless Rake::Task.task_defined?("db:seed")
     # if another ORM has defined db:seed, don't run it twice.
     desc 'Load the seed data from db/seeds.rb'
     task :seed => :environment do
@@ -13,16 +15,22 @@ namespace :db do
     end
   end
 
-  desc 'Create the database, and initialize with the seed data'
-  task :setup => [ 'db:create', 'db:seed' ]
-
-  desc 'Delete data and seed'
-  task :reseed => [ 'db:drop', 'db:seed' ]
-
-  task :create => :environment do
-    # noop
+  unless Rake::Task.task_defined?("db:setup")
+    desc 'Create the database, and initialize with the seed data'
+    task :setup => [ 'db:create', 'db:seed' ]
   end
-  
+
+  unless Rake::Task.task_defined?("db:reseed")
+    desc 'Delete data and seed'
+    task :reseed => [ 'db:drop', 'db:seed' ]
+  end
+
+  unless Rake::Task.task_defined?("db:create")
+    task :create => :environment do
+      # noop
+    end
+  end
+
   desc 'Current database version'
   task :version => :environment do
     puts Mongoid::Migrator.current_version.to_s
