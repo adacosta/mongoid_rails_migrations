@@ -1,9 +1,9 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'mongoid_rails_migrations'
-  s.version     = '0.0.7'
+  s.version     = '0.0.8'
   s.summary     = 'Data migrations for Mongoid in Active Record style, minus column input.'
-  s.description = 'Sometimes you just need to migrate data.'
+  s.description = 'Migrations for the migrator.'
 
   # only tested with 1.9.1, but let's go for it
   s.required_ruby_version     = '>= 1.8.6'
@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.homepage          = 'http://github.com/adacosta/mongoid_rails_migrations'
   
   s.require_paths = ["lib"]
-  s.files         = Dir['.gitignore', 'Gemfile', 'Rakefile', 'README.rdoc', 'mongoid_rails_migrations.gemspec', 'VERSION', 'lib/**/*']
+  s.files         = Dir['.gitignore', 'Gemfile', 'Gemfile.lock', 'Rakefile', 'README.rdoc', 'mongoid_rails_migrations.gemspec', 'VERSION', 'lib/**/*']
   s.test_files    = Dir['test/**/*']
   s.has_rdoc      = false
   
