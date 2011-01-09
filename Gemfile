@@ -5,4 +5,4 @@ source :rubygems
 gem "rails", "~> 3.0.0"
 gem "railties", "~> 3.0.0"
 gem "activesupport", "~> 3.0.0"
-gem "mongoid", "~> 2.0.0.beta.17"
+gem "mongoid", :git => "git://github.com/mongoid/mongoid.git"
