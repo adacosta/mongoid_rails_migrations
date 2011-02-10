@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
 	rails_version = '~> 3.0.0'
 	
   s.add_dependency('bundler', '>= 0.9.19')
-	s.add_dependency('mongoid', '~> 2.0.0.beta.17')
+	s.add_dependency('mongoid', '~> 2.0.0.rc')
   s.add_dependency('rails',  rails_version)
   s.add_dependency('railties',  rails_version)
   s.add_dependency('activesupport',  rails_version)
