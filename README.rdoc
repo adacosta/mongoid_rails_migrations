@@ -1,3 +1,8 @@
+== RELEASE NOTES
+* This version is designed to support all current development versions of Mongoid 2.0. The inclusion of the mongoid dependency has been removed.
+* In 2.0.0.rc.1, Mongoid::Config changed from a Class to a Module.
+* In your application, please be sure to require mongoid before mongoid_rails_migrations. Again, this is necessary to support both pre/post 2.0.0.rc.1. I plan on fixing the ugly once mongoid goes 2.0 final.
+
 == SYNOPSIS
 * Data migrations for Mongoid.
 
@@ -7,11 +12,11 @@
 
 == REQUIREMENTS
 * rails ~> 3.0.0
-* mongoid ~> 2.0.0.beta.17
+* mongoid ~> 2.0.0 (this isn't currently enforced)
 
 == INSTALL
 * gem install mongoid_rails_migrations
-* In your Gemfile, include:
+* In your Gemfile, include (after including mongoid):
   gem "mongoid_rails_migrations", ">=0.0.2" # or whatever the current version happens to be
 
 == FEATURES AND HOW TO USE
