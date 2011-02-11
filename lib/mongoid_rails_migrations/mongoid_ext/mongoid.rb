@@ -8,7 +8,7 @@ module Mongoid
     # older mongoid style; pre 2.0.0.rc.1
     Config.module_eval do
       cattr_accessor :timestamped_migrations
-      @@timestamped_migrations ||= true # default true
+      class_variable_set(:@@timestamped_migrations, true) unless class_variable_get(:@@timestamped_migrations)
 
       def self.reset
         @@timestamped_migrations = true

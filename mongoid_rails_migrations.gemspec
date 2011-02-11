@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'mongoid_rails_migrations'
-  s.version     = '0.0.9'
+  s.version     = '0.0.10'
   s.summary     = 'Data migrations for Mongoid in Active Record style, minus column input.'
   s.description = 'Migrations for the migrator.'
 
