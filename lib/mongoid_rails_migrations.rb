@@ -1,13 +1,8 @@
 # encoding: utf-8
 
 require 'rubygems'
-# Set up gems listed in the Gemfile.
-if File.exist?(File.expand_path('../../Gemfile', __FILE__))
-  require 'bundler'
-  Bundler.setup
-end
-
-Bundler.require(:default) if defined?(Bundler)
+require 'bundler/setup'
+Bundler.require(:default)
 
 # Add base to path incase not included as a gem
 $:.unshift(File.dirname(__FILE__)) unless
