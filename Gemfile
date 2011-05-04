@@ -3,9 +3,9 @@
 source :rubygems
 
 group :default do
-  gem "rails", "~> 3.0.0"
-  gem "railties", "~> 3.0.0"
-  gem "activesupport", "~> 3.0.0"
+  gem "rails", "~> 3.0"
+  gem "railties", "~> 3.0"
+  gem "activesupport", "~> 3.0"
 end
 
 group :test do
