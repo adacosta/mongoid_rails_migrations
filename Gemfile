@@ -3,11 +3,11 @@
 source :rubygems
 
 group :default do
-  gem "rails", "~> 3.0.0"
-  gem "railties", "~> 3.0.0"
-  gem "activesupport", "~> 3.0.0"
+  gem "rails", ">= 3.0.0"
+  gem "railties", ">= 3.0.0"
+  gem "activesupport", ">= 3.0.0"
 end
 
 group :test do
-  gem "mongoid", "~> 2.0.0.rc", :git => "http://github.com/mongoid/mongoid.git"
+  gem "mongoid", ">= 2.0.0", :git => "http://github.com/mongoid/mongoid.git"
 end

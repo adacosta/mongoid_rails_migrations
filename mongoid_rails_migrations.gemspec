@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'mongoid_rails_migrations'
-  s.version     = '0.0.10'
+  s.version     = '0.0.11'
   s.summary     = 'Data migrations for Mongoid in Active Record style, minus column input.'
   s.description = 'Migrations for the migrator.'
 
@@ -15,13 +15,13 @@ Gem::Specification.new do |s|
   s.homepage          = 'http://github.com/adacosta/mongoid_rails_migrations'
   
   s.require_paths = ["lib"]
-  s.files         = Dir['.gitignore', 'Gemfile', 'Gemfile.lock', 'Rakefile', 'README.rdoc', 'mongoid_rails_migrations.gemspec', 'VERSION', 'lib/**/*']
+  s.files         = Dir['.gitignore', 'Gemfile', 'Gemfile.lock', 'Rakefile', 'README.rdoc', 'mongoid_rails_migrations.gemspec', 'lib/**/*']
   s.test_files    = Dir['test/**/*']
   s.has_rdoc      = false
   
-	rails_version = '~> 3.0.0'
+	rails_version = '>= 3.0.0'
 	
-  s.add_dependency('bundler', '>= 0.9.19')
+  s.add_dependency('bundler', '>= 1.0.0')
   s.add_dependency('rails',  rails_version)
   s.add_dependency('railties',  rails_version)
   s.add_dependency('activesupport',  rails_version)
