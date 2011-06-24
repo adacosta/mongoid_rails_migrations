@@ -1,13 +1,6 @@
-# Use `bundle install` in order to install these gems
-# Use `bundle exec rake` in order to run the specs using the bundle
-source :rubygems
+source "http://rubygems.org"
 
-group :default do
-  gem "rails", ">= 3.0.0"
-  gem "railties", ">= 3.0.0"
-  gem "activesupport", ">= 3.0.0"
-end
-
-group :test do
-  gem "mongoid", ">= 2.0.0", :git => "http://github.com/mongoid/mongoid.git"
-end
+# Specify your gem's dependencies in gem_test.gemspec
+gemspec :development_group => :dev_mongoid_rails_migrations
+gemspec :test_group => :test_mongoid_rails_migrations
+gemspec :name => 'mongoid_rails_migrations'

@@ -1,14 +1,12 @@
 == RELEASE NOTES
-* This version is designed to support all current development versions of Mongoid 2.0. The inclusion of the mongoid dependency has been removed.
-* In 2.0.0.rc.1, Mongoid::Config changed from a Class to a Module.
-* In your application, please be sure to require mongoid before mongoid_rails_migrations. Again, this is necessary to support both pre/post 2.0.0.rc.1. I plan on fixing the ugly once mongoid goes 2.0 final.
+* Rails 3.1 compatible
 
 == SYNOPSIS
 * Data migrations for Mongoid.
 
 == MIGRATE WHEN ...
-* You need to rearrange or split data
-* You have model instances which you leverage as schema data
+* You need to rearrange data
+* The migrating is good
 
 == REQUIREMENTS
 * rails ~> 3.0.0
@@ -17,13 +15,13 @@
 == INSTALL
 * gem install mongoid_rails_migrations
 * In your Gemfile, include (after including mongoid):
-  gem "mongoid_rails_migrations", ">=0.0.2" # or whatever the current version happens to be
+  gem "mongoid_rails_migrations", "0.0.13"
 
 == FEATURES AND HOW TO USE
 * generator:
   * rails generate mongoid:migration your_migration_name_here
 
-* migrations (tested):
+* migrations:
   * db:migrate
   * db:migrate:down
   * db:migrate:up
@@ -31,10 +29,10 @@
   * db:migrate:redo
   * db:migrate:reset
   * db:reseed (handled by mongoid)
-  * db:version (added to glean current migration)
+  * db:version
 
 == NOTES
-* Only tested with ruby 1.9.1
+* Only tested with ruby 1.9.2
 
 == CREDITS TO
   * rails
@@ -43,7 +41,7 @@
 Much of this gem simply modifies existing code from both projects.
 With that out of the way, on to the license.
 
-== LICENSE
+== LICENSE (MIT)
 
 Copyright © 2010: Alan Da Costa
 
