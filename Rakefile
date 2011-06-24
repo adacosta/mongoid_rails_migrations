@@ -1,7 +1,7 @@
 $:.unshift(File.dirname(__FILE__))
 namespace :test do
   require 'bundler/setup'
-  Bundler.require(:test)
+  Bundler.require(:development_mongoid_rails_migrations)
 
   namespace :mongoid do
     desc "Test mongoid rails migrations"

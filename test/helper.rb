@@ -2,15 +2,14 @@ $:.unshift(File.dirname(__FILE__)) unless
   $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
 require 'bundler/setup'
-Bundler.require(:default)
-Bundler.require(:test)
+Bundler.require(:development_mongoid_rails_migrations)
 
 require 'config'
 require 'test/unit'
 
 require 'rake'
 require 'rake/testtask'
-require 'rake/rdoctask'
+require 'rdoc/task'
 
 # leave out active_record, in favor of a monogo adapter
 %w(
