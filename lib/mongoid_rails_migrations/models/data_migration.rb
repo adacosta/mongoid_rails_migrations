@@ -2,13 +2,14 @@ class DataMigration
   include Mongoid::Document
 
 ##
-# life gets harder when the id isn't a string...
+# DataMigration *expects* that a string will be acceptable as the _id.  use
+# know strategies for recent mongoids WRT allowing the _id to be one. 
 
-  field(:_id, :type => String, :default => proc{ App.uuid })
+  field(:_id, :type => String)
 
   if respond_to?(:identity)
     begin
-      identity(:type => String, :default => proc{ App.uuid })
+      identity(:type => String)
     rescue
       nil
     end
