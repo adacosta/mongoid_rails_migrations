@@ -21,6 +21,14 @@ module Mongoid
 
     def teardown; end
 
+    def test_data_migration_timestamp
+      migration = DataMigration.create!
+
+      assert_respond_to(migration, :created_at)
+      assert !migration.created_at.nil?
+      assert_in_delta(Time.now, migration.created_at, 5)
+    end
+
     def test_drop_works
       assert_equal 0, Mongoid::Migrator.current_version, "db:drop should take us down to version 0"
     end
