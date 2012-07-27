@@ -144,7 +144,11 @@ module Mongoid #:nodoc
 
       def connection
         # ActiveRecord::Base.connection
-        Mongoid.database
+        if ::Mongoid::VERSION < '3'
+          Mongoid.database
+        else
+          ::Mongoid.default_session
+        end
       end
 
       def method_missing(method, *arguments, &block)
