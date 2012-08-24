@@ -1,5 +1,5 @@
 == RELEASE NOTES
-* Rails 3.1 compatible
+* Rails 3.2 compatible
 
 == SYNOPSIS
 * Data migrations for Mongoid.
@@ -9,8 +9,8 @@
 * The migrating is good
 
 == REQUIREMENTS
-* rails ~> 3.0.0
-* mongoid ~> 2.0.0 (this isn't currently enforced)
+* rails ~> 3.2.0
+* mongoid ~> 3.0.0 (this isn't currently enforced)
 
 == INSTALL
 * gem install mongoid_rails_migrations

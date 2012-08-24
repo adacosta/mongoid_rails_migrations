@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + '/helper'
 class Mongoid::Migration
   class <<self
     attr_accessor :message_count
+
     def puts(text="")
       self.message_count ||= 0
       self.message_count += 1
@@ -16,7 +17,7 @@ module Mongoid
     def setup
       Mongoid::Migration.verbose = true
       # same as db:drop command in lib/mongoid_rails_migrations/mongoid_ext/railties/database.rake
-      Mongoid.master.collections.each {|col| col.drop_indexes && col.drop unless ['system.indexes', 'system.users'].include?(col.name) }
+      Mongoid.default_session.drop
     end
 
     def teardown; end
@@ -122,7 +123,7 @@ module Mongoid
     end
 
     def test_default_state_of_timestamped_migrations
-      assert Mongoid.config.timestamped_migrations, "Mongoid.config.timestamped_migrations should default to true"
+      assert Mongoid.configure.timestamped_migrations, "Mongoid.configure.timestamped_migrations should default to true"
     end
 
     def test_timestamped_migrations_generates_non_sequential_next_number
@@ -131,7 +132,7 @@ module Mongoid
     end
 
     def test_turning_off_timestamped_migrations
-      Mongoid.config.timestamped_migrations = false
+      Mongoid.configure.timestamped_migrations = false
       next_number = Mongoid::Generators::Base.next_migration_number(MIGRATIONS_ROOT + "/valid")
       assert_equal "20100513063903", next_number
     end
