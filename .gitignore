@@ -1,4 +1,6 @@
 .bundle
 .DS_Store
 .rvmrc
+.idea
 log/
+.ruby-version
