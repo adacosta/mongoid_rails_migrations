@@ -144,7 +144,7 @@ module Mongoid #:nodoc
 
       def connection
         # ActiveRecord::Base.connection
-        Mongoid.database
+        ::Mongoid.default_session
       end
 
       def method_missing(method, *arguments, &block)
