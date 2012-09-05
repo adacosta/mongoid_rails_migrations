@@ -1,5 +1,6 @@
 == RELEASE NOTES
-* Rails 3.2 compatible
+* For rails >= 3.2.0 and mongoid >= 3.0.0, use version 1.0.0
+* For rails >= 3.0.0 (but < 3.2.0) and mongoid >= 2.0.0, use version 0.0.14
 
 == SYNOPSIS
 * Data migrations for Mongoid.
@@ -7,14 +8,10 @@
 == MIGRATE WHEN ...
 * The migrating is good
 
-== REQUIREMENTS
-* rails ~> 3.2.0
-* mongoid ~> 3.0.0
-
 == INSTALL
 * gem install mongoid_rails_migrations
 * In your Gemfile, include (after including mongoid):
-  gem "mongoid_rails_migrations", <current_version>
+  gem "mongoid_rails_migrations", <version>
 
 == FEATURES AND HOW TO USE
 * generator:

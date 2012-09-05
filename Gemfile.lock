@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mongoid_rails_migrations (0.0.14)
+    mongoid_rails_migrations (1.0.0)
       activesupport (>= 3.2.0)
       bundler (>= 1.0.0)
       rails (>= 3.2.0)

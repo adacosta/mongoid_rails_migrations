@@ -6,6 +6,7 @@ Bundler.require(:mongoid_rails_migrations)
 $:.unshift(File.dirname(__FILE__)) unless
   $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
+require 'mongoid_rails_migrations/version'
 require 'mongoid_rails_migrations/models/data_migration'
 require 'mongoid_rails_migrations/mongoid_ext/mongoid'
 require 'mongoid_rails_migrations/mongoid_ext/railtie'
