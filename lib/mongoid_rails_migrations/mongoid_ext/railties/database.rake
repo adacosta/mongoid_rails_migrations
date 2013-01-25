@@ -36,10 +36,10 @@ namespace :mongoid do
     puts Mongoid::Migrator.current_version.to_s
   end
 
-  desc "Migrate the database through scripts in mongoid/migrate. Target specific version with VERSION=x. Turn off output with VERBOSE=false."
+  desc "Migrate the database through scripts in db/mongoid/migrate. Target specific version with VERSION=x. Turn off output with VERBOSE=false."
   task :migrate => :environment do
     Mongoid::Migration.verbose = ENV["VERBOSE"] ? ENV["VERBOSE"] == "true" : true
-    Mongoid::Migrator.migrate("mongoid/migrate/", ENV["VERSION"] ? ENV["VERSION"].to_i : nil)
+    Mongoid::Migrator.migrate("db/mongoid/migrate/", ENV["VERSION"] ? ENV["VERSION"].to_i : nil)
   end
 
   namespace :migrate do
