@@ -5,6 +5,9 @@
 == SYNOPSIS
 * Data migrations for Mongoid. This fork modifies namespacing in an effort to allow sane migrations for when both Mongoid and ActiveRecord are used in the same application.
 
+== NOTES
+* In this fork, Mongoid migrations will go to db/migrate/mongoid and ActiveRecord migrations will remain in db/migrate/
+
 == MIGRATE WHEN ...
 * The migrating is good
 
@@ -16,7 +19,7 @@
 == FEATURES AND HOW TO USE
 * generator:
   * rails generate mongoid:migration your_migration_name_here
-
+  
 * migrations:
   * mongoid:migrate
   * mongoid:migrate:down
