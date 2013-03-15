@@ -8,13 +8,12 @@ Gem::Specification.new do |s|
   s.license     = 'MIT'
   s.description = 'Migrations for the migrator.'
 
-  # only tested with 1.9.1, but let's go for it
   s.required_ruby_version     = '>= 1.8.6'
   s.required_rubygems_version = '>= 1.3.6'
 
   s.author            = 'Alan Da Costa'
-  s.email             = 'alandacosta@gmail.com.com'
-  s.date              = %q{2012-09-04}
+  s.email             = 'alandacosta@gmail.com'
+  s.date              = %q{2013-03-14}
   s.homepage          = 'http://github.com/adacosta/mongoid_rails_migrations'
 
   s.require_paths = ['lib']
