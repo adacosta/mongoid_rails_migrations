@@ -5,6 +5,7 @@ Gem::Specification.new do |s|
   s.name        = 'mongoid_rails_migrations'
   s.version     = MongoidRailsMigrations::VERSION
   s.summary     = 'Data migrations for Mongoid in Active Record style, minus column input.'
+  s.license     = 'MIT'
   s.description = 'Migrations for the migrator.'
 
   # only tested with 1.9.1, but let's go for it
