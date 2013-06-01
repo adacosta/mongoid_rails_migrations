@@ -24,9 +24,9 @@ Gem::Specification.new do |s|
   rails_version = '>= 3.2.0'
 
   s.add_dependency('bundler', '>= 1.0.0')
+  s.add_dependency('mongoid', '>= 3.0.0')
   s.add_dependency('rails',  rails_version)
   s.add_dependency('railties',  rails_version)
   s.add_dependency('activesupport',  rails_version)
-  s.add_development_dependency('mongoid', '>= 3.0.0')
   s.add_development_dependency('test-unit', '>= 2.5.0')
 end
