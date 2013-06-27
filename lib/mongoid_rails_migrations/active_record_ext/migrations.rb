@@ -287,7 +287,20 @@ module Mongoid #:nodoc
         raise UnknownMigrationVersionError.new(@target_version)
       end
 
-      start = up? ? 0 : (migrations.index(current) || 0)
+      if up?
+        if current
+          start = migrations.index(current) + 1
+        else
+          start = 0
+        end
+      else
+        if current
+          start = migrations.index(current)
+        else
+          start = 0
+        end
+      end
+
       finish = migrations.index(target) || migrations.size - 1
       runnable = migrations[start..finish]
 
