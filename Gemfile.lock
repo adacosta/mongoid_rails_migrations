@@ -134,3 +134,4 @@ DEPENDENCIES
   minitest
   mongoid_rails_migrations!
   pry
+  rake
