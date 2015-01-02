@@ -1,9 +1,0 @@
-language: ruby
-os:
-  - linux
-rvm:
-  - 1.9.3
-  - 2.1.5
-  - jruby-19mode
-gemfile:
-  - mongoid_rails_migrations.gemspec
