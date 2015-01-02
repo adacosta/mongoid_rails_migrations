@@ -15,9 +15,7 @@ module Mongoid
       end
     end
   else # module
-    Config.module_eval do
-      # newer mongoid style; >= 2.0.0.rc.1
-      option :timestamped_migrations, :default => true
-    end
+    # newer mongoid style; >= 2.0.0.rc.1
+    Config.option :timestamped_migrations, :default => true
   end
 end
