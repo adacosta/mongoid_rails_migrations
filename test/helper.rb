@@ -1,12 +1,11 @@
-$:.unshift(File.dirname(__FILE__)) unless
-  $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
+$:.unshift(File.dirname(__FILE__))
 
 require 'bundler/setup'
-Bundler.require(:development_mongoid_rails_migrations)
+Bundler.require(:test)
 
+require 'mongoid'
 require 'config'
-require 'test/unit'
-
+require 'minitest/autorun'
 require 'rake'
 require 'rake/testtask'
 require 'rdoc/task'
@@ -25,9 +24,11 @@ require 'rdoc/task'
   end
 end
 
+
+ActiveSupport.test_order = :sorted if ActiveSupport.respond_to?(:test_order)
+
 module TestMongoidRailsMigrations
   class Application < Rails::Application; end
 end
 
-# TestMongoidRailsMigrations::Application.initialize!
 TestMongoidRailsMigrations::Application.load_tasks

@@ -1,6 +1,7 @@
 == RELEASE NOTES
-* For rails >= 3.2.0 and mongoid >= 3.0.0, use version 1.0.0
-* For rails >= 3.0.0 (but < 3.2.0) and mongoid >= 2.0.0, use version 0.0.14
+* The most current release, 1.1.x, targets Mongoid >= 4.0.0 and Rails >= 4.2.0 .
+* For Rails >= 3.2.0 and Mongoid >= 3.0.0, use version 1.0.0 .
+* For Rails >= 3.0.0 (but < 3.2.0) and Mongoid >= 2.0.0, use version 0.0.14 .
 
 == SYNOPSIS
 * Data migrations for Mongoid.
@@ -26,6 +27,9 @@
   * db:migrate:reset
   * db:reseed (handled by mongoid)
   * db:version
+
+== TESTING
+```rake test:mongoid:migrations```
 
 == CREDITS TO
   * rails
