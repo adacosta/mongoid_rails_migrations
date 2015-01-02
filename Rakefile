@@ -1,5 +1,7 @@
 $:.unshift(File.dirname(__FILE__))
 
+task :default => ['test:mongoid:migrations']
+
 namespace :test do
   namespace :mongoid do
     desc "Test mongoid rails migrations"
