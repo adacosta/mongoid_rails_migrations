@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
 
   s.author            = 'Alan Da Costa'
   s.email             = 'alandacosta@gmail.com'
-  s.date              = %q{2013-03-14}
+  s.date              = %q{2015-01-01}
   s.homepage          = 'http://github.com/adacosta/mongoid_rails_migrations'
 
   s.require_paths = ['lib']
@@ -21,12 +21,11 @@ Gem::Specification.new do |s|
   s.test_files    = Dir['test/**/*']
   s.has_rdoc      = false
 
-  rails_version = '>= 3.2.0'
+  rails_version = '>= 4.2.0'
 
-  s.add_dependency('bundler', '>= 1.0.0')
-  s.add_dependency('mongoid', '>= 3.0.0')
-  s.add_dependency('rails',  rails_version)
-  s.add_dependency('railties',  rails_version)
-  s.add_dependency('activesupport',  rails_version)
-  s.add_development_dependency('test-unit', '>= 2.5.0')
+  s.add_runtime_dependency('bundler', '>= 1.0.0')
+  s.add_runtime_dependency('mongoid', '>= 4.0.0')
+  s.add_runtime_dependency('rails',  rails_version)
+  s.add_runtime_dependency('railties',  rails_version)
+  s.add_runtime_dependency('activesupport',  rails_version)
 end
