@@ -21,7 +21,7 @@ module Mongoid
         Mongoid.default_client.database.drop
       else
         Mongoid.default_session.drop
-      end    
+      end
     end
 
     def teardown; end
