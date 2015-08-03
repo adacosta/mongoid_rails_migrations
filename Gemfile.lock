@@ -1,3 +1,14 @@
+GIT
+  remote: git@github.com:mongodb/mongoid.git
+  revision: 06adf5775829e649057ecd973f358fac33f88f1a
+  tag: v5.0.0.beta
+  specs:
+    mongoid (5.0.0.beta)
+      activemodel (~> 4.0)
+      mongo (= 2.1.0.beta)
+      origin (~> 2.1)
+      tzinfo (>= 0.3.37)
+
 PATH
   remote: .
   specs:
@@ -47,10 +58,9 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     arel (6.0.0)
-    bson (2.3.0)
+    bson (3.2.1)
     builder (3.2.2)
     coderay (1.1.0)
-    connection_pool (2.1.0)
     erubis (2.7.0)
     globalid (0.3.0)
       activesupport (>= 4.1.0)
@@ -65,19 +75,11 @@ GEM
     mime-types (2.4.3)
     mini_portile (0.6.2)
     minitest (5.5.0)
-    mongoid (4.0.0)
-      activemodel (~> 4.0)
-      moped (~> 2.0.0)
-      origin (~> 2.1)
-      tzinfo (>= 0.3.37)
-    moped (2.0.2)
-      bson (~> 2.2)
-      connection_pool (~> 2.0)
-      optionable (~> 0.2.0)
+    mongo (2.1.0.beta)
+      bson (~> 3.0)
     multi_json (1.10.1)
     nokogiri (1.6.5)
       mini_portile (~> 0.6.0)
-    optionable (0.2.0)
     origin (2.1.1)
     pry (0.10.1)
       coderay (~> 1.1.0)
@@ -132,6 +134,10 @@ PLATFORMS
 
 DEPENDENCIES
   minitest
+  mongoid!
   mongoid_rails_migrations!
   pry
   rake
+
+BUNDLED WITH
+   1.10.4
