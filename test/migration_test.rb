@@ -17,7 +17,11 @@ module Mongoid
     def setup
       Mongoid::Migration.verbose = true
       # same as db:drop command in lib/mongoid_rails_migrations/mongoid_ext/railties/database.rake
-      Mongoid.default_session.drop
+      if Mongoid::VERSION =~ /^5\./
+        Mongoid.default_client.database.drop
+      else
+        Mongoid.default_session.drop
+      end    
     end
 
     def teardown; end
