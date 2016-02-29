@@ -17,7 +17,7 @@ module Mongoid
     def setup
       Mongoid::Migration.verbose = true
       # same as db:drop command in lib/mongoid_rails_migrations/mongoid_ext/railties/database.rake
-      if Mongoid::VERSION =~ /^5\./
+      if Mongoid.respond_to?(:default_client)
         Mongoid.default_client.database.drop
       else
         Mongoid.default_session.drop
@@ -139,6 +139,10 @@ module Mongoid
       Mongoid.configure.timestamped_migrations = false
       next_number = Mongoid::Generators::Base.next_migration_number(MIGRATIONS_ROOT + "/valid")
       assert_equal "20100513063903", next_number
+    end
+
+    def test_migration_returns_connection_without_error
+      Mongoid::Migration.connection
     end
 
   end
