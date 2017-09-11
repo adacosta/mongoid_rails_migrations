@@ -39,7 +39,7 @@ namespace :db do
   desc "Migrate the database through scripts in db/migrate. Target specific version with VERSION=x. Turn off output with VERBOSE=false."
   task :migrate => :environment do
     Mongoid::Migration.verbose = ENV["VERBOSE"] ? ENV["VERBOSE"] == "true" : true
-    Mongoid::Migrator.migrate("db/migrate/", ENV["VERSION"] ? ENV["VERSION"].to_i : nil)
+    Mongoid::Migrator.migrate(Mongoid::Migrator.migrations_path, ENV["VERSION"] ? ENV["VERSION"].to_i : nil)
   end
 
   namespace :migrate do
@@ -62,21 +62,21 @@ namespace :db do
     task :up => :environment do
       version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
       raise "VERSION is required" unless version
-      Mongoid::Migrator.run(:up, "db/migrate/", version)
+      Mongoid::Migrator.run(:up, Mongoid::Migrator.migrations_path, version)
     end
 
     desc 'Runs the "down" for a given migration VERSION.'
     task :down => :environment do
       version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
       raise "VERSION is required" unless version
-      Mongoid::Migrator.run(:down, "db/migrate/", version)
+      Mongoid::Migrator.run(:down, Mongoid::Migrator.migrations_path, version)
     end
   end
 
   desc 'Rolls the database back to the previous migration. Specify the number of steps with STEP=n'
   task :rollback => :environment do
     step = ENV['STEP'] ? ENV['STEP'].to_i : 1
-    Mongoid::Migrator.rollback('db/migrate/', step)
+    Mongoid::Migrator.rollback(Mongoid::Migrator.migrations_path, step)
   end
 
   namespace :schema do

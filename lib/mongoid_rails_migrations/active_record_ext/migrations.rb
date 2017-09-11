@@ -188,6 +188,8 @@ module Mongoid #:nodoc
 
   class Migrator#:nodoc:
     class << self
+      attr_writer :migrations_path
+
       def migrate(migrations_path, target_version = nil)
         case
           when target_version.nil?              then up(migrations_path, target_version)
@@ -217,7 +219,7 @@ module Mongoid #:nodoc
       end
 
       def migrations_path
-        'db/migrate'
+        @migrations_path ||= ['db/migrate']
       end
 
       # def schema_migrations_table_name
@@ -228,7 +230,7 @@ module Mongoid #:nodoc
       def get_all_versions
         # table = Arel::Table.new(schema_migrations_table_name)
         #         Base.connection.select_values(table.project(table['version']).to_sql).map(&:to_i).sort
-        DataMigration.all.map {|datamigration| datamigration.version.to_i }.sort
+        DataMigration.all.map { |datamigration| datamigration.version.to_i }.sort
       end
 
       def current_version
@@ -331,7 +333,9 @@ module Mongoid #:nodoc
 
     def migrations
       @migrations ||= begin
-        files = Dir["#{@migrations_path}/[0-9]*_*.rb"]
+        files = Array(@migrations_path).inject([]) do |files, path|
+          files += Dir["#{path}/[0-9]*_*.rb"]
+        end
 
         migrations = files.inject([]) do |klasses, file|
           version, name = file.scan(/([0-9]+)_([_a-z0-9]*).rb/).first

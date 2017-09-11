@@ -30,9 +30,24 @@ module Mongoid
       assert_equal 0, Mongoid::Migrator.current_version, "db:drop should take us down to version 0"
     end
 
+    def test_migrations_path
+      assert_equal ["db/migrate"], Mongoid::Migrator.migrations_path
+
+      Mongoid::Migrator.migrations_path += ["engines/my_engine/db/migrate"]
+
+      assert_equal ["db/migrate", "engines/my_engine/db/migrate"], Mongoid::Migrator.migrations_path
+    end
+
     def test_finds_migrations
       assert Mongoid::Migrator.new(:up, MIGRATIONS_ROOT + "/valid").migrations.size == 2
       assert_equal 2, Mongoid::Migrator.new(:up, MIGRATIONS_ROOT + "/valid").pending_migrations.size
+    end
+
+    def test_finds_migrations_in_multiple_paths
+      migration_paths = [MIGRATIONS_ROOT + "/valid", MIGRATIONS_ROOT + "/other_valid"]
+
+      assert Mongoid::Migrator.new(:up, migration_paths).migrations.size == 3
+      assert_equal 3, Mongoid::Migrator.new(:up, migration_paths).pending_migrations.size
     end
 
     def test_migrator_current_version
