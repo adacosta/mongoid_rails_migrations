@@ -64,16 +64,24 @@ module Mongoid #:nodoc
     cattr_accessor :verbose
 
     class << self
-      def up_with_benchmarks #:nodoc:
-        migrate(:up)
+      module UpMigration
+        def up #:nodoc:
+          with_benchmarks(:up) { super }
+        end
       end
 
-      def down_with_benchmarks #:nodoc:
-        migrate(:down)
+      module DownMigration
+        def down #:nodoc:
+          with_benchmarks(:down) { super }
+        end
       end
 
       # Execute this migration in the named direction
       def migrate(direction)
+        with_benchmarks(direction) { send(direction) }
+      end
+
+      def with_benchmarks(direction)
         return unless respond_to?(direction)
 
         case direction
@@ -82,7 +90,7 @@ module Mongoid #:nodoc
         end
 
         result = nil
-        time = Benchmark.measure { result = send("#{direction}_without_benchmarks") }
+        time = Benchmark.measure { result = yield }
 
         case direction
           when :up   then announce "migrated (%.4fs)" % time.real; write
@@ -102,8 +110,10 @@ module Mongoid #:nodoc
           @ignore_new_methods = true
 
           case sym
-            when :up, :down
-              singleton_class.send(:alias_method_chain, sym, "benchmarks")
+            when :up
+              singleton_class.prepend(UpMigration)
+            when :down
+              singleton_class.prepend(DownMigration)
           end
         ensure
           @ignore_new_methods = false
