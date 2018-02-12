@@ -5,7 +5,7 @@ module Mongoid
     class MigrationGenerator < Base
 
       def create_migration_file
-        migration_template "migration.rb", "db/migrate/#{file_name}.rb"
+        migration_template "migration.rb", "db/mongoid/migrate/#{file_name}.rb"
       end
 
       protected
