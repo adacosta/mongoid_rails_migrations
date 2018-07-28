@@ -79,6 +79,12 @@ namespace :db do
     Mongoid::Migrator.rollback(Mongoid::Migrator.migrations_path, step)
   end
 
+  desc 'Rolls the database back to the specified VERSION'
+  task :rollback_to => :environment do
+    version = ENV['VERSION'].to_i
+    Mongoid::Migrator.rollback_to('db/migrate/', version)
+  end
+
   namespace :schema do
     task :load do
       # noop
