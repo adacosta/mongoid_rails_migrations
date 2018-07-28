@@ -204,9 +204,9 @@ module Mongoid #:nodoc
 
       def rollback_to(migrations_path, target_version)
         all_versions = get_all_versions
-	rollback_to = all_versions.index(target_version.to_i) + 1
-	rollback_steps = all_versions.size - rollback_to
-	rollback migrations_path, rollback_steps
+        rollback_to = all_versions.index(target_version.to_i) + 1
+        rollback_steps = all_versions.size - rollback_to
+        rollback migrations_path, rollback_steps
       end
 
       def forward(migrations_path, steps=1)

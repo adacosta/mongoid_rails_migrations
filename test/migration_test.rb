@@ -47,8 +47,8 @@ module Mongoid
     def test_finds_migrations_in_multiple_paths
       migration_paths = [MIGRATIONS_ROOT + "/valid", MIGRATIONS_ROOT + "/other_valid"]
 
-      assert Mongoid::Migrator.new(:up, migration_paths).migrations.size == 3
-      assert_equal 3, Mongoid::Migrator.new(:up, migration_paths).pending_migrations.size
+      assert_equal 4, Mongoid::Migrator.new(:up, migration_paths).migrations.size
+      assert_equal 4, Mongoid::Migrator.new(:up, migration_paths).pending_migrations.size
     end
 
     def test_migrator_current_version

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mongoid_rails_migrations (1.1.0)
+    mongoid_rails_migrations (1.1.1)
       activesupport (>= 4.2.0)
       bundler (>= 1.0.0)
       mongoid (>= 4.0.0)
@@ -139,4 +139,4 @@ DEPENDENCIES
   rake
 
 BUNDLED WITH
-   1.13.7
+   1.16.1

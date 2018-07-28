@@ -1,45 +1,63 @@
-== RELEASE NOTES
-* The most current release, 1.1.x, targets Mongoid >= 4.0.0 and Rails >= 4.2.0 .
-* For Rails >= 3.2.0 and Mongoid >= 3.0.0, use version 1.0.0 .
-* For Rails >= 3.0.0 (but < 3.2.0) and Mongoid >= 2.0.0, use version 0.0.14 .
+Data migrations for Mongoid.
 
-== SYNOPSIS
-* Data migrations for Mongoid.
+Gemfile:
+```ruby
+gem "mongoid_rails_migrations"
+```
 
-== MIGRATE WHEN ...
-* The migrating is good
+# How to use
 
-== INSTALL
-* gem install mongoid_rails_migrations
-* In your Gemfile, include (after including mongoid):
-  gem "mongoid_rails_migrations", <version>
+Create migration
+```
+$ rails generate mongoid:migration <your_migration_name_here>
+```
 
-== FEATURES AND HOW TO USE
-* generator:
-  * rails generate mongoid:migration your_migration_name_here
+Run migrations:
+```
+$ rails db:migrate
+$ rails db:migrate:down VERSION=
+$ rails db:migrate:up VERSION=
+$ rails db:rollback
+$ rails db:rollback_to VERSION=
+$ rails db:migrate:redo
+$ rails db:migrate:reset
+$ rails db:reseed (handled by mongoid)
+$ rails db:version
+```
 
-* migrations:
-  * db:migrate
-  * db:migrate:down
-  * db:migrate:up
-  * db:rollback
-  * db:migrate:redo
-  * db:migrate:reset
-  * db:reseed (handled by mongoid)
-  * db:version
+# Compatibility
 
-== TESTING
-```rake test:mongoid:migrations```
+* `1.1.x` targets Mongoid >= `4.0.0` and Rails >= `4.2.0`
+* `1.0.0` targers Mongoid >= `3.0.0` and Rails >= `3.2.0`
+* `0.0.14` targets Mongoid >= `2.0.0` and Rails >= `3.0.0` (but < `3.2.0`)
 
-== CREDITS TO
-  * rails
-  * mongoid
-  * contributions from the community (git log)
+# Changelog
+
+## Unreleased
+[Compare master with 1.1.1](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.1.1...master)
+* Added a `rollback_to` task to rollback to a particular version (#17)
+
+## 1.1.1
+_18/08/2015_
+* Added support for Rails5
+* First version in Changelog
+
+# Tests
+
+```
+$ bundle exec rake
+```
+
+# Credits to
+
+* rails
+* mongoid
+* contributions from the community (git log)
 
 Much of this gem simply modifies existing code from both projects.
 With that out of the way, on to the license.
 
-== LICENSE (MIT)
+# License (MIT)
 
 Copyright © 2013: Alan Da Costa
 

@@ -81,7 +81,8 @@ namespace :db do
 
   desc 'Rolls the database back to the specified VERSION'
   task :rollback_to => :environment do
-    version = ENV['VERSION'].to_i
+    version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
+    raise "VERSION is required" unless version
     Mongoid::Migrator.rollback_to('db/migrate/', version)
   end
 
