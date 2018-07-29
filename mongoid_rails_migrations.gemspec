@@ -1,32 +1,28 @@
-require File.join(File.dirname(__FILE__), 'lib', 'mongoid_rails_migrations', 'version')
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'mongoid_rails_migrations/version'
 
-Gem::Specification.new do |s|
-  s.platform    = Gem::Platform::RUBY
-  s.name        = 'mongoid_rails_migrations'
-  s.version     = MongoidRailsMigrations::VERSION
-  s.summary     = 'Data migrations for Mongoid in Active Record style, minus column input.'
-  s.license     = 'MIT'
-  s.description = 'Migrations for the migrator.'
+Gem::Specification.new do |spec|
+  spec.name        = 'mongoid_rails_migrations'
+  spec.version     = MongoidRailsMigrations::VERSION
+  spec.authors     = ['Alan Da Costa']
+  spec.email      = ['alandacosta@gmail.com']
 
-  s.required_ruby_version     = '>= 1.8.6'
-  s.required_rubygems_version = '>= 1.3.6'
+  spec.summary     = 'Data migrations for Mongoid.'
+  spec.description = 'Data migrations for Mongoid in Active Record style, minus column input.'
+  spec.homepage    = 'http://github.com/adacosta/mongoid_rails_migrations'
+  spec.license     = 'MIT'
 
-  s.author            = 'Alan Da Costa'
-  s.email             = 'alandacosta@gmail.com'
-  s.date              = %q{2015-01-01}
-  s.homepage          = 'http://github.com/adacosta/mongoid_rails_migrations'
-
-  s.require_paths = ['lib']
-  s.files         = Dir['.gitignore', 'Gemfile', 'Gemfile.lock', 'Rakefile', 'README.rdoc', 'mongoid_rails_migrations.gemspec', 'lib/**/*']
-  s.test_files    = Dir['test/**/*']
-  s.has_rdoc      = false
+  spec.files         = Dir['README.rdoc', 'mongoid_rails_migrations.gemspec', 'lib/**/*']
+  spec.require_paths = ['lib']
 
   rails_version = '>= 4.2.0'
 
-  s.add_runtime_dependency('bundler', '>= 1.0.0')
-  s.add_runtime_dependency('mongoid', '>= 4.0.0')
-  s.add_runtime_dependency('rails',  rails_version)
-  s.add_runtime_dependency('railties',  rails_version)
-  s.add_runtime_dependency('activesupport',  rails_version)
-  s.add_development_dependency 'rake'
+  spec.add_runtime_dependency('bundler', '>= 1.0.0')
+  spec.add_runtime_dependency('mongoid', '>= 4.0.0')
+  spec.add_runtime_dependency('rails',  rails_version)
+  spec.add_runtime_dependency('railties',  rails_version)
+  spec.add_runtime_dependency('activesupport',  rails_version)
+  spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'minitest'
 end

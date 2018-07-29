@@ -1,18 +1,13 @@
-require File.dirname(__FILE__) + '/helper'
+require 'helper'
 
+# Hide task output
 class Mongoid::Migration
-  class <<self
-    attr_accessor :message_count
-
-    def puts(text="")
-      self.message_count ||= 0
-      self.message_count += 1
-    end
+  def self.puts _
   end
 end
 
 module Mongoid
-  class TestCase < ActiveSupport::TestCase #:nodoc:
+  class TestCase < Minitest::Test #:nodoc:
 
     def setup
       Mongoid::Migration.verbose = true
@@ -25,7 +20,9 @@ module Mongoid
       end
     end
 
-    def teardown; end
+    def teardown
+      Mongoid.configure.timestamped_migrations = true
+    end
 
     def test_drop_works
       assert_equal 0, Mongoid::Migrator.current_version, "db:drop should take us down to version 0"
@@ -136,19 +133,19 @@ module Mongoid
     end
 
     def test_migrator_with_duplicate_names
-      assert_raise(Mongoid::DuplicateMigrationNameError) do
+      assert_raises(Mongoid::DuplicateMigrationNameError) do
         Mongoid::Migrator.migrate(MIGRATIONS_ROOT + "/duplicate/names", nil)
       end
     end
 
     def test_migrator_with_duplicate_versions
-      assert_raise(Mongoid::DuplicateMigrationVersionError) do
+      assert_raises(Mongoid::DuplicateMigrationVersionError) do
         Mongoid::Migrator.migrate(MIGRATIONS_ROOT + "/duplicate/versions", nil)
       end
     end
 
     def test_migrator_with_missing_version_numbers
-      assert_raise(Mongoid::UnknownMigrationVersionError) do
+      assert_raises(Mongoid::UnknownMigrationVersionError) do
         Mongoid::Migrator.migrate(MIGRATIONS_ROOT + "/valid", 500)
       end
     end
@@ -159,7 +156,7 @@ module Mongoid
 
     def test_timestamped_migrations_generates_non_sequential_next_number
       next_number = Mongoid::Generators::Base.next_migration_number(MIGRATIONS_ROOT + "/valid")
-      assert_not_equal "20100513063903", next_number
+      refute_equal "20100513063903", next_number
     end
 
     def test_turning_off_timestamped_migrations

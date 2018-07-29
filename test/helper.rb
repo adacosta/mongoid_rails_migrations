@@ -1,31 +1,16 @@
-$:.unshift(File.dirname(__FILE__))
-
 require 'bundler/setup'
 Bundler.require(:test)
 
-require 'mongoid'
-require 'config'
+# Dependencies
+require 'mongoid_rails_migrations'
+require 'rails/generators/mongoid/mongoid_generator'
+require 'mongoid/railtie'
 require 'minitest/autorun'
-require 'rake'
-require 'rake/testtask'
-require 'rdoc/task'
 
-# leave out active_record, in favor of a monogo adapter
-%w(
-  action_controller
-  action_mailer
-  active_resource
-  rails/test_unit
-  mongoid
-).each do |framework|
-  begin
-    require "#{framework}/railtie"
-  rescue LoadError
-  end
-end
-
-
-ActiveSupport.test_order = :sorted if ActiveSupport.respond_to?(:test_order)
+# Test setup
+MIGRATIONS_ROOT = 'test/migrations'
+Mongoid.configure.connect_to('mongoid_test')
+require 'models/survey_schema'
 
 module TestMongoidRailsMigrations
   class Application < Rails::Application; end

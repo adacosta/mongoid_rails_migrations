@@ -1,7 +1,6 @@
-source "http://rubygems.org"
-gemspec :name => 'mongoid_rails_migrations'
+source "https://rubygems.org"
 
-group :test do
-  gem 'minitest'
-  gem 'pry'
-end
+git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+
+# Specify your gem's dependencies in mongoid_rails_migrations.gemspec
+gemspec
