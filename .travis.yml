@@ -1,0 +1,14 @@
+language: ruby
+cache: bundler
+services: mongodb
+rvm:
+  - 2.2.10
+  - 2.3.7
+  - 2.4.4
+  - 2.5.1
+  - jruby-9.1.9.0
+gemfile:
+  - test/gemfiles/rails-4.2-mongoid-5.x
+  - test/gemfiles/rails-5.0-mongoid-6.x
+  - test/gemfiles/rails-5.2-mongoid-7.x
+  - test/gemfiles/rails-edge

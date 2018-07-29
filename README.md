@@ -1,4 +1,4 @@
-Data migrations for Mongoid.
+Data migrations for Mongoid. [![Build Status](https://travis-ci.com/adacosta/mongoid_rails_migrations.svg?branch=master)](https://travis-ci.com/adacosta/mongoid_rails_migrations)
 
 Gemfile:
 ```ruby
