@@ -71,6 +71,11 @@ namespace :db do
       raise "VERSION is required" unless version
       Mongoid::Migrator.run(:down, Mongoid::Migrator.migrations_path, version)
     end
+
+    desc 'Display status of migrations'
+    task :status => :environment do
+      Mongoid::Migrator.status("db/migrate/", ENV["VERSION"] ? ENV["VERSION"].to_i : nil)
+    end
   end
 
   desc 'Rolls the database back to the previous migration. Specify the number of steps with STEP=n'
