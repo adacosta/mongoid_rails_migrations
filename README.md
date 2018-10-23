@@ -27,6 +27,7 @@ $ rails db:version
 
 # Compatibility
 
+* `1.2.x` targets Mongoid >= `4.0.0` and Rails >= `4.2.0`
 * `1.1.x` targets Mongoid >= `4.0.0` and Rails >= `4.2.0`
 * `1.0.0` targers Mongoid >= `3.0.0` and Rails >= `3.2.0`
 * `0.0.14` targets Mongoid >= `2.0.0` and Rails >= `3.0.0` (but < `3.2.0`)
@@ -35,7 +36,11 @@ $ rails db:version
 
 ## Unreleased
 [Compare master with 1.1.1](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.1.1...master)
+
+## 1.2.0
+_23/10/2018_
 * Added a `rollback_to` task to rollback to a particular version (#17)
+* Added a `db:migrate:status` task to list pending migrations (#46)
 
 ## 1.1.1
 _18/08/2015_
