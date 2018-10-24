@@ -200,9 +200,9 @@ module Mongoid #:nodoc
 
       def status(migrations_path, target_version = nil)
         case
-          when target_version.nil?              then self.new(:up, migrations_path, target_version).status
-          when current_version > target_version then self.new(:down, migrations_path, target_version).status
-          else                                       self.new(:up, migrations_path, target_version).status
+          when target_version.nil?              then new(:up, migrations_path, target_version).status
+          when current_version > target_version then new(:down, migrations_path, target_version).status
+          else                                       new(:up, migrations_path, target_version).status
         end
       end
 
