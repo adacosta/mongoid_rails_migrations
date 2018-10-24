@@ -21,6 +21,7 @@ $ rails db:rollback
 $ rails db:rollback_to VERSION=
 $ rails db:migrate:redo
 $ rails db:migrate:reset
+$ rails db:migrate:status
 $ rails db:reseed (handled by mongoid)
 $ rails db:version
 ```
