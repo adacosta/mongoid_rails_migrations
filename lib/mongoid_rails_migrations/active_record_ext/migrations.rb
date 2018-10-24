@@ -335,21 +335,11 @@ module Mongoid #:nodoc
     end
 
     def status
-      runnable = runnable_migrations
-
-      to_run = runnable.select do |migration|
-        if up?
-          !migrated.include?(migration.version.to_i)
-        elsif down?
-          migrated.include?(migration.version.to_i)
-        end
-      end
-
       database_name = Migration.connection.options[:database]
       puts "\ndatabase: #{database_name}\n\n"
       puts "#{'Status'.center(8)}  #{'Migration ID'.ljust(14)}  Migration Name"
       puts "-" * 50
-      to_run.each do |migration|
+      to_run_migrations.each do |migration|
         status = migrated.include?(migration.version.to_i) ? 'down' : 'up'
         puts "#{status.center(8)}  #{migration.version.to_s.ljust(14)}  #{migration.name}"
       end
@@ -408,6 +398,16 @@ module Mongoid #:nodoc
       runnable.pop if down? && !target.nil?
 
       runnable
+    end
+
+    def to_run_migrations
+      runnable_migrations.select do |migration|
+        if up?
+          !migrated.include?(migration.version.to_i)
+        elsif down?
+          migrated.include?(migration.version.to_i)
+        end
+      end
     end
 
     def migrated
