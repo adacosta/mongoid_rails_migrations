@@ -198,6 +198,14 @@ module Mongoid #:nodoc
         end
       end
 
+      def status(migrations_path, target_version = nil)
+        case
+          when target_version.nil?              then new(:up, migrations_path, target_version).status
+          when current_version > target_version then new(:down, migrations_path, target_version).status
+          else                                       new(:up, migrations_path, target_version).status
+        end
+      end
+
       def rollback(migrations_path, steps=1)
         move(:down, migrations_path, steps)
       end
@@ -294,19 +302,7 @@ module Mongoid #:nodoc
     end
 
     def migrate
-      current = migrations.detect { |m| m.version == current_version }
-      target = migrations.detect { |m| m.version == @target_version }
-
-      if target.nil? && !@target_version.nil? && @target_version > 0
-        raise UnknownMigrationVersionError.new(@target_version)
-      end
-
-      start = up? ? 0 : (migrations.index(current) || 0)
-      finish = migrations.index(target) || migrations.size - 1
-      runnable = migrations[start..finish]
-
-      # skip the last migration if we're headed down, but not ALL the way down
-      runnable.pop if down? && !target.nil?
+      runnable = runnable_migrations
 
       runnable.each do |migration|
         Rails.logger.info "Migrating to #{migration.name} (#{migration.version})" if Rails.logger
@@ -335,6 +331,17 @@ module Mongoid #:nodoc
         rescue => e
           raise StandardError, "An error has occurred, #{migration.version} and all later migrations canceled:\n\n#{e}", e.backtrace
         end
+      end
+    end
+
+    def status
+      database_name = Migration.connection.options[:database]
+      puts "\ndatabase: #{database_name}\n\n"
+      puts "#{'Status'.center(8)}  #{'Migration ID'.ljust(14)}  Migration Name"
+      puts "-" * 50
+      to_run_migrations.each do |migration|
+        status = migrated.include?(migration.version.to_i) ? 'down' : 'up'
+        puts "#{status.center(8)}  #{migration.version.to_s.ljust(14)}  #{migration.name}"
       end
     end
 
@@ -373,6 +380,34 @@ module Mongoid #:nodoc
     def pending_migrations
       already_migrated = migrated
       migrations.reject { |m| already_migrated.include?(m.version.to_i) }
+    end
+
+    def runnable_migrations
+      current = migrations.detect { |m| m.version == current_version }
+      target = migrations.detect { |m| m.version == @target_version }
+
+      if target.nil? && !@target_version.nil? && @target_version > 0
+        raise UnknownMigrationVersionError.new(@target_version)
+      end
+
+      start = up? ? 0 : (migrations.index(current) || 0)
+      finish = migrations.index(target) || migrations.size - 1
+      runnable = migrations[start..finish]
+
+      # skip the last migration if we're headed down, but not ALL the way down
+      runnable.pop if down? && !target.nil?
+
+      runnable
+    end
+
+    def to_run_migrations
+      runnable_migrations.select do |migration|
+        if up?
+          !migrated.include?(migration.version.to_i)
+        elsif down?
+          migrated.include?(migration.version.to_i)
+        end
+      end
     end
 
     def migrated
