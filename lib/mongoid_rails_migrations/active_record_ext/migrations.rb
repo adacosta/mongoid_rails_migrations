@@ -198,12 +198,8 @@ module Mongoid #:nodoc
         end
       end
 
-      def status(migrations_path, target_version = nil)
-        case
-          when target_version.nil?              then new(:up, migrations_path, target_version).status
-          when current_version > target_version then new(:down, migrations_path, target_version).status
-          else                                       new(:up, migrations_path, target_version).status
-        end
+      def status(migrations_path)
+        new(:up, migrations_path).status
       end
 
       def rollback(migrations_path, steps=1)
@@ -339,8 +335,9 @@ module Mongoid #:nodoc
       puts "\ndatabase: #{database_name}\n\n"
       puts "#{'Status'.center(8)}  #{'Migration ID'.ljust(14)}  Migration Name"
       puts "-" * 50
-      to_run_migrations.each do |migration|
-        status = migrated.include?(migration.version.to_i) ? 'down' : 'up'
+      up_migrations = migrated.to_set
+      migrations.each do |migration|
+        status = up_migrations.include?(migration.version.to_i) ? 'up' : 'down'
         puts "#{status.center(8)}  #{migration.version.to_s.ljust(14)}  #{migration.name}"
       end
     end
@@ -398,16 +395,6 @@ module Mongoid #:nodoc
       runnable.pop if down? && !target.nil?
 
       runnable
-    end
-
-    def to_run_migrations
-      runnable_migrations.select do |migration|
-        if up?
-          !migrated.include?(migration.version.to_i)
-        elsif down?
-          migrated.include?(migration.version.to_i)
-        end
-      end
     end
 
     def migrated

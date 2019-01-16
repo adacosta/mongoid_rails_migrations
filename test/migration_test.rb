@@ -169,7 +169,53 @@ module Mongoid
       Mongoid::Migration.connection
     end
 
-    def test_status_up
+    def test_status_with_all_pending_migrations
+      output = <<-EOF
+
+database: mongoid_test
+
+ Status   Migration ID    Migration Name
+--------------------------------------------------
+  down    20100513054656  AddBaselineSurveySchema
+  down    20100513055502  AddSecondSurveySchema
+  down    20100513063902  AddImprovementPlanSurveySchema
+      EOF
+      assert_output(output) { Mongoid::Migrator.status(MIGRATIONS_ROOT + "/valid") }
+    end
+
+    def test_status_with_some_pending_migrations
+      Mongoid::Migrator.migrate(MIGRATIONS_ROOT + "/valid", 20100513054656)
+      output = <<-EOF
+
+database: mongoid_test
+
+ Status   Migration ID    Migration Name
+--------------------------------------------------
+   up     20100513054656  AddBaselineSurveySchema
+  down    20100513055502  AddSecondSurveySchema
+  down    20100513063902  AddImprovementPlanSurveySchema
+      EOF
+      assert_output(output) { Mongoid::Migrator.status(MIGRATIONS_ROOT + "/valid") }
+    end
+
+    def test_status_with_a_middle_pending_migrations
+      Mongoid::Migrator.migrate(MIGRATIONS_ROOT + "/valid")
+      Mongoid::Migrator.run(:down, MIGRATIONS_ROOT + "/valid", 20100513055502)
+      output = <<-EOF
+
+database: mongoid_test
+
+ Status   Migration ID    Migration Name
+--------------------------------------------------
+   up     20100513054656  AddBaselineSurveySchema
+  down    20100513055502  AddSecondSurveySchema
+   up     20100513063902  AddImprovementPlanSurveySchema
+      EOF
+      assert_output(output) { Mongoid::Migrator.status(MIGRATIONS_ROOT + "/valid") }
+    end
+
+    def test_status_without_pending_migrations
+      Mongoid::Migrator.migrate(MIGRATIONS_ROOT + "/valid")
       output = <<-EOF
 
 database: mongoid_test
@@ -181,43 +227,6 @@ database: mongoid_test
    up     20100513063902  AddImprovementPlanSurveySchema
       EOF
       assert_output(output) { Mongoid::Migrator.status(MIGRATIONS_ROOT + "/valid") }
-    end
-
-    def test_status_up_with_target
-      output = <<-EOF
-
-database: mongoid_test
-
- Status   Migration ID    Migration Name
---------------------------------------------------
-   up     20100513054656  AddBaselineSurveySchema
-      EOF
-      assert_output(output) { Mongoid::Migrator.status(MIGRATIONS_ROOT + "/valid", 20100513054656) }
-    end
-
-    def test_status_up_without_pending_migrations
-      Mongoid::Migrator.migrate(MIGRATIONS_ROOT + "/valid")
-      output = <<-EOF
-
-database: mongoid_test
-
- Status   Migration ID    Migration Name
---------------------------------------------------
-      EOF
-      assert_output(output) { Mongoid::Migrator.status(MIGRATIONS_ROOT + "/valid") }
-    end
-
-    def test_status_down
-      Mongoid::Migrator.migrate(MIGRATIONS_ROOT + "/valid")
-      output = <<-EOF
-
-database: mongoid_test
-
- Status   Migration ID    Migration Name
---------------------------------------------------
-  down    20100513063902  AddImprovementPlanSurveySchema
-      EOF
-      assert_output(output) { Mongoid::Migrator.status(MIGRATIONS_ROOT + "/valid", 20100513055502) }
     end
 
   end
