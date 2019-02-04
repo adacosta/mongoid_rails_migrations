@@ -74,7 +74,7 @@ namespace :db do
 
     desc 'Display status of migrations'
     task :status => :environment do
-      Mongoid::Migrator.status("db/migrate/", ENV["VERSION"] ? ENV["VERSION"].to_i : nil)
+      Mongoid::Migrator.status("db/migrate/")
     end
   end
 

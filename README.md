@@ -38,6 +38,10 @@ $ rails db:version
 ## Unreleased
 [Compare master with 1.1.1](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.1.1...master)
 
+## 1.2.1
+_17/01/2019_
+* Fix on `db:migrate:status` task to behave like the `ActiveRecord` version (#47)
+
 ## 1.2.0
 _23/10/2018_
 * Added a `rollback_to` task to rollback to a particular version (#17)
