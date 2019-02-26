@@ -26,6 +26,11 @@ $ rails db:reseed (handled by mongoid)
 $ rails db:version
 ```
 
+To override the default migrations path (`db/migrate`), add the following line to your `application.rb` file:
+```
+Mongoid::Migrator.migrations_path = ['foo/bar/db/migrate', 'path/to/db/migrate']
+```
+
 # Compatibility
 
 * `1.2.x` targets Mongoid >= `4.0.0` and Rails >= `4.2.0`
