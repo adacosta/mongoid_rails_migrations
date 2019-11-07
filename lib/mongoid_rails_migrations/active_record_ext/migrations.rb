@@ -31,14 +31,14 @@ module Mongoid #:nodoc
 
   # Data migrations can manage the modification of data. It's a solution to the common problem of modifying
   # data between code revisions within a document oriented database.
-  # 
+  #
   # Example of simple migration for a system dependency:
-  # 
+  #
   #   class AddBaselineSurveySchema < Mongoid::Migration
   #     def self.up
   #       SurveySchema.create(:label => 'Baseline Survey')
   #     end
-  #     
+  #
   #     def self.down
   #       SurveySchema.where(:label => 'Baseline Survey').first.destroy
   #     end
@@ -103,7 +103,8 @@ module Mongoid #:nodoc
 
           case sym
             when :up, :down
-              singleton_class.send(:alias_method_chain, sym, "benchmarks")
+              singleton_class.send(:alias_method, "#{sym}_without_benchmarks".to_sym, sym)
+              singleton_class.send(:alias_method, sym, "#{sym}_with_benchmarks".to_sym)
           end
         ensure
           @ignore_new_methods = false
