@@ -189,6 +189,7 @@ module Mongoid #:nodoc
   class Migrator#:nodoc:
     class << self
       attr_writer :migrations_path
+      attr :namespace
 
       def migrate(migrations_path, target_version = nil)
         case
@@ -231,6 +232,14 @@ module Mongoid #:nodoc
 
       def migrations_path
         @migrations_path ||= ['db/migrate']
+      end
+
+      def namespace
+        @namespace ||= 'db'
+      end
+
+      def namespace=(val)
+        @namespace = val.to_s
       end
 
       # def schema_migrations_table_name
