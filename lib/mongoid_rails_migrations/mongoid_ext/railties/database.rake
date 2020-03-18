@@ -74,7 +74,7 @@ namespace :db do
 
     desc 'Display status of migrations'
     task :status => :environment do
-      Mongoid::Migrator.status("db/migrate/")
+      Mongoid::Migrator.status(Mongoid::Migrator.migrations_path)
     end
   end
 
@@ -88,7 +88,7 @@ namespace :db do
   task :rollback_to => :environment do
     version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
     raise "VERSION is required" unless version
-    Mongoid::Migrator.rollback_to('db/migrate/', version)
+    Mongoid::Migrator.rollback_to(Mongoid::Migrator.migrations_path, version)
   end
 
   namespace :schema do
