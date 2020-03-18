@@ -31,6 +31,11 @@ To override the default migrations path (`db/migrate`), add the following line t
 Mongoid::Migrator.migrations_path = ['foo/bar/db/migrate', 'path/to/db/migrate']
 ```
 
+To override the default rake task namespace to avoid collision with `ActiveRecord` rake tasks, add the following line to your `application.rb` file:
+```
+Mongoid::Migrator.namespace = 'db:mongoid'
+```
+
 # Compatibility
 
 * `1.2.x` targets Mongoid >= `4.0.0` and Rails >= `4.2.0`
