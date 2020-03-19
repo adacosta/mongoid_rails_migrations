@@ -10,6 +10,7 @@ module Mongoid
   class TestCase < Minitest::Test #:nodoc:
 
     def setup
+      Mongoid::Migrator.migrations_path = ["db/migrate"]
       Mongoid::Migration.verbose = true
       Mongo::Logger.logger.level = 1
       # same as db:drop command in lib/mongoid_rails_migrations/mongoid_ext/railties/database.rake
@@ -229,5 +230,19 @@ database: mongoid_test
       assert_output(output) { Mongoid::Migrator.status(MIGRATIONS_ROOT + "/valid") }
     end
 
+  end
+
+  class NameSpaceTestCase < TestCase
+    def setup
+      Mongoid::Migrator.namespace = 'db:mongoid'
+      super
+      Mongoid::Migrator.migrations_path = ["db/mongoid"]
+    end
+
+    def test_migrations_path
+      assert_equal ["db/mongoid"], Mongoid::Migrator.migrations_path
+      Mongoid::Migrator.migrations_path += ["engines/my_engine/db/migrate"]
+      assert_equal ["db/mongoid", "engines/my_engine/db/migrate"], Mongoid::Migrator.migrations_path
+    end
   end
 end

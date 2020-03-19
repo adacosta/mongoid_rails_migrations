@@ -31,6 +31,28 @@ To override the default migrations path (`db/migrate`), add the following line t
 Mongoid::Migrator.migrations_path = ['foo/bar/db/migrate', 'path/to/db/migrate']
 ```
 
+# Using along side ActiveRecord migrations
+If your rails app uses both `Mongoid` and `ActiveRecord` migrations then the migration files and rake tasks created by the two gems will cause conflict.
+In order to resolve this add the following lines to your `application.rb` file:
+```
+Mongoid::Migrator.namespace = 'db:mongoid'
+Mongoid::Migrator.migrations_path = ['db/mongoid']
+```
+With the above changes the generated migration files will be created under the `db/mongoid` path instead of the default `db/migrate` path and the rake tasks would change to:
+```
+$ rails db:mongoid:migrate
+$ rails db:mongoid:migrate:down VERSION=
+$ rails db:mongoid:migrate:up VERSION=
+$ rails db:mongoid:rollback
+$ rails db:mongoid:rollback_to VERSION=
+$ rails db:mongoid:migrate:redo
+$ rails db:mongoid:migrate:reset
+$ rails db:mongoid:migrate:status
+$ rails db:mongoid:reseed (handled by mongoid)
+$ rails db:mongoid:version
+```
+If there are pre-existing Mongoid migration files under the `db/migrate` path then they'll have to be moved manually to the new path.
+
 # Compatibility
 
 * `1.2.x` targets Mongoid >= `4.0` and Rails >= `4.2`
