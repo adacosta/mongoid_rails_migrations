@@ -33,15 +33,16 @@ Mongoid::Migrator.migrations_path = ['foo/bar/db/migrate', 'path/to/db/migrate']
 
 # Compatibility
 
-* `1.2.x` targets Mongoid >= `4.0.0` and Rails >= `4.2.0`
-* `1.1.x` targets Mongoid >= `4.0.0` and Rails >= `4.2.0`
-* `1.0.0` targers Mongoid >= `3.0.0` and Rails >= `3.2.0`
-* `0.0.14` targets Mongoid >= `2.0.0` and Rails >= `3.0.0` (but < `3.2.0`)
+* `1.2.x` targets Mongoid >= `4.0` and Rails >= `4.2`
+* `1.1.x` targets Mongoid >= `4.0` and Rails >= `4.2`
+* `1.0.0` targers Mongoid >= `3.0` and Rails >= `3.2`
+* `0.0.14` targets Mongoid >= `2.0` and Rails >= `3.0` (but < `3.2`)
 
 # Changelog
 
 ## Unreleased
-[Compare master with 1.1.1](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.1.1...master)
+[Compare master with 1.2.1](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.2.1...master)
+* Rake Tasks updated to use `migrations_path` instead of hardcoded path (#52)
 
 ## 1.2.1
 _17/01/2019_
