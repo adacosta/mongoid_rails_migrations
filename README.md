@@ -31,6 +31,13 @@ To override the default migrations path (`db/migrate`), add the following line t
 Mongoid::Migrator.migrations_path = ['foo/bar/db/migrate', 'path/to/db/migrate']
 ```
 
+If you want to use output migration use the hook `after_migrate`
+```
+Mongoid::Migration.after_migrate = Proc.new do |output, name|
+  upload_to_s3(name, output)
+end
+```
+
 # Compatibility
 
 * `1.2.x` targets Mongoid >= `4.0` and Rails >= `4.2`
@@ -41,8 +48,11 @@ Mongoid::Migrator.migrations_path = ['foo/bar/db/migrate', 'path/to/db/migrate']
 # Changelog
 
 ## Unreleased
+
+## 1.3.0
 [Compare master with 1.2.1](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.2.1...master)
 * Rake Tasks updated to use `migrations_path` instead of hardcoded path (#52)
+* Added `after_migrate` hook(#)
 
 ## 1.2.1
 _17/01/2019_
