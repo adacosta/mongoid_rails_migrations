@@ -237,7 +237,7 @@ database: mongoid_test
       }
       Mongoid::Migrator.up(MIGRATIONS_ROOT + "/other_valid")
 
-      assert_match /\=\=  AddOtherPlanSurveySchema: migrating \=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\n\=\=  AddOtherPlanSurveySchema: migrated \(\d\.\d{1,4}s\)/, buffer
+      assert_match(/^==  AddOtherPlanSurveySchema: migrating =======================================\n==  AddOtherPlanSurveySchema: migrated \(.+s\) ==============================\n\n$/, buffer)
     end
 
   end
