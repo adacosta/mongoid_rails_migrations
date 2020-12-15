@@ -92,7 +92,7 @@ module Mongoid #:nodoc
         begin
           @@after_migrate.call(@buffer_output, name) if @@after_migrate
         rescue => e
-          announce("Error in after_migrate hook: #{e}")
+          say("Error in after_migrate hook: #{e}")
         end
         result
       end
@@ -118,10 +118,8 @@ module Mongoid #:nodoc
 
       def write(text="")
         @buffer_output ||=  ""
-        if verbose
-          @buffer_output += text + "\n"
-          puts(text)
-        end
+        @buffer_output += text + "\n"
+        puts(text) if verbose
       end
 
       def announce(message)

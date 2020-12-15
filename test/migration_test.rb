@@ -229,5 +229,16 @@ database: mongoid_test
       assert_output(output) { Mongoid::Migrator.status(MIGRATIONS_ROOT + "/valid") }
     end
 
+    def test_hook_after_migration
+      buffer = ""
+      Mongoid::Migration.after_migrate = Proc.new {
+        |output, name|
+        buffer = output
+      }
+      Mongoid::Migrator.up(MIGRATIONS_ROOT + "/other_valid")
+
+      assert_match /\=\=  AddOtherPlanSurveySchema: migrating \=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\n\=\=  AddOtherPlanSurveySchema: migrated \(\d\.\d{1,4}s\)/, buffer
+    end
+
   end
 end
