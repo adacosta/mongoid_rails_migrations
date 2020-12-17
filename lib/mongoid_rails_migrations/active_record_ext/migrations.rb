@@ -90,7 +90,7 @@ module Mongoid #:nodoc
         end
 
         begin
-          @@after_migrate.call(@buffer_output, name) if @@after_migrate
+          @@after_migrate.call(@buffer_output, name, direction) if @@after_migrate
         rescue => e
           say("Error in after_migrate hook: #{e}")
         end
