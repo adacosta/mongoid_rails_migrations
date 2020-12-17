@@ -61,7 +61,7 @@ module Mongoid #:nodoc
   #
   class Migration
     @@verbose = true
-    cattr_accessor :verbose
+    cattr_accessor :verbose, :after_migrate
 
     class << self
       def up_with_benchmarks #:nodoc:
@@ -89,6 +89,11 @@ module Mongoid #:nodoc
           when :down then announce "reverted (%.4fs)" % time.real; write
         end
 
+        begin
+          @@after_migrate.call(@buffer_output, name, direction) if @@after_migrate
+        rescue => e
+          say("Error in after_migrate hook: #{e}")
+        end
         result
       end
 
@@ -112,6 +117,8 @@ module Mongoid #:nodoc
       end
 
       def write(text="")
+        @buffer_output ||=  ""
+        @buffer_output += text + "\n"
         puts(text) if verbose
       end
 
