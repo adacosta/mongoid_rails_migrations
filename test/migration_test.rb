@@ -247,7 +247,7 @@ database: mongoid_test
       assert_raises (StandardError) do
         Mongoid::Migrator.up(MIGRATIONS_ROOT + "/crash")
       end
-      assert_match(/\A==  BasicCrash: migrating =====================================================\nAn error has occurred, 20210105165947 and all later migrations canceled:\n\nCrash migration\n.*test/, buffer)
+      assert_match(/\A==  BasicCrash: migrating =====================================================\nAn error has occurred, 20210105165947 and all later migrations canceled:\n\nCrash migration\n.*\/test\/migrations\/crash\/20210105165947_basic_crash.rb:3:in `up'\n/, buffer)
     end
   end
 end
