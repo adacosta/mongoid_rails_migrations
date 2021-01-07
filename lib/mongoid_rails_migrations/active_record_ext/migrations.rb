@@ -333,7 +333,7 @@ module Mongoid #:nodoc
           migration.migrate(@direction)
           record_version_state_after_migrating(migration.version)
         rescue => e
-          output = Migration.buffer_output + "An error has occurred, #{migration.version} and all later migrations canceled:\n\n#{e}"
+          output = Migration.buffer_output + "An error has occurred, #{migration.version} and all later migrations canceled:\n\n#{e}\n#{e.backtrace.join("\n")}"
           begin
             Migration.after_migrate.call(output, migration.name, @direction, true) if Migration.after_migrate
             Migration.buffer_output = nil

@@ -49,9 +49,9 @@ Mongoid::Migration.after_migrate = ->(output, name, direction, crash) {
 
 ## Unreleased
 
-## 1.3.1
+## 1.4.0
 _06/01/2021_
-* The hook `migrations_path` can be use when migration crash (#55)
+* The hook `migrations_path` can be use when migration crash (#56)
 
 ## 1.3.0
 [Compare master with 1.2.1](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.2.1...master)
