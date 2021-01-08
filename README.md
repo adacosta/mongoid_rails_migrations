@@ -33,8 +33,8 @@ Mongoid::Migrator.migrations_path = ['foo/bar/db/migrate', 'path/to/db/migrate']
 
 If you want to use output migration use the hook `after_migrate`
 ```
-Mongoid::Migration.after_migrate = ->(output, name, direction) {
-  upload_to_s3(name, output, direction)
+Mongoid::Migration.after_migrate = ->(output, name, direction, crash) {
+  upload_to_s3(name, output, direction) if crash == false
 }
 ```
 
@@ -49,8 +49,13 @@ Mongoid::Migration.after_migrate = ->(output, name, direction) {
 
 ## Unreleased
 
+## 1.4.0
+_08/01/2021_
+[Compare master with 1.3.0](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.3.0...master)
+* The hook `after_migrate` can be use when migration crash (#56)
+
 ## 1.3.0
-[Compare master with 1.2.1](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.2.1...master)
+_17/12/2020_
 * Rake Tasks updated to use `migrations_path` instead of hardcoded path (#52)
 * Added `after_migrate` hook(#54)
 
