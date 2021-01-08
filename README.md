@@ -50,11 +50,12 @@ Mongoid::Migration.after_migrate = ->(output, name, direction, crash) {
 ## Unreleased
 
 ## 1.4.0
-_06/01/2021_
-* The hook `migrations_path` can be use when migration crash (#56)
+_08/01/2021_
+[Compare master with 1.3.0](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.3.0...master)
+* The hook `after_migrate` can be use when migration crash (#56)
 
 ## 1.3.0
-[Compare master with 1.2.1](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.2.1...master)
+_17/12/2020_
 * Rake Tasks updated to use `migrations_path` instead of hardcoded path (#52)
 * Added `after_migrate` hook(#54)
 
