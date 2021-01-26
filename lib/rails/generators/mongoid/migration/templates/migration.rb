@@ -1,5 +1,5 @@
 class <%= migration_class_name %> < Mongoid::Migration
-  def self.up
+<%= "  client :#{client_name}\n\n" if client_name %>  def self.up
   end
 
   def self.down

@@ -9,8 +9,10 @@ gem "mongoid_rails_migrations"
 
 Create migration
 ```
-$ rails generate mongoid:migration <your_migration_name_here>
+$ rails generate mongoid:migration <your_migration_name_here> <you_client_name_here>
 ```
+
+The client name is optional.
 
 Run migrations:
 ```
@@ -25,6 +27,8 @@ $ rails db:migrate:status
 $ rails db:reseed (handled by mongoid)
 $ rails db:version
 ```
+
+All the taks listed above support the `MONGOID_CLIENT_NAME` environment variable in order to use multiple databases.
 
 To override the default migrations path (`db/migrate`), add the following line to your `application.rb` file:
 ```
@@ -48,6 +52,12 @@ Mongoid::Migration.after_migrate = ->(output, name, direction, crash) {
 # Changelog
 
 ## Unreleased
+
+## 1.5.0
+_26/02/2021_
+[Compare master with 1.4.0](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.4.0...master)
+* Rake tasks updated to support a custom client with the `MONGOID_CLIENT_NAME` environment variable
+* Migrations now support custom client name
 
 ## 1.4.0
 _08/01/2021_

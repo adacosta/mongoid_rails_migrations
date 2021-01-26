@@ -64,6 +64,8 @@ module Mongoid #:nodoc
     cattr_accessor :verbose, :after_migrate, :buffer_output
 
     class << self
+      attr_accessor :mongoid_client_name
+
       def up_with_benchmarks #:nodoc:
         migrate(:up)
       end
@@ -151,12 +153,28 @@ module Mongoid #:nodoc
         self.verbose = save
       end
 
+      def client(mongoid_client_name = nil)
+        if mongoid_client_name
+          self.mongoid_client_name = mongoid_client_name
+        else
+          self.mongoid_client_name || 'default'
+        end
+      end
+
       def connection
         # ActiveRecord::Base.connection
-        if ::Mongoid.respond_to?(:default_client)
-          ::Mongoid.default_client
+        if mongoid_client_name = Thread.current[:mongoid_client_name]
+          if ::Mongoid.respond_to?(:client)
+            ::Mongoid.client(mongoid_client_name)
+          else
+            ::Mongoid.session(mongoid_client_name)
+          end
         else
-          ::Mongoid.default_session
+          if ::Mongoid.respond_to?(:default_client)
+            ::Mongoid.default_client
+          else
+            ::Mongoid.default_session
+          end
         end
       end
 
@@ -179,7 +197,7 @@ module Mongoid #:nodoc
 
     attr_accessor :name, :version, :filename
 
-    delegate :migrate, :announce, :write, :to=>:migration
+    delegate :migrate, :announce, :write, :client, :to=>:migration
 
     private
 
@@ -195,6 +213,8 @@ module Mongoid #:nodoc
   end
 
   class Migrator#:nodoc:
+    delegate :with_mongoid_client, :to => "self.class"
+
     class << self
       attr_writer :migrations_path
 
@@ -216,7 +236,10 @@ module Mongoid #:nodoc
 
       def rollback_to(migrations_path, target_version)
         all_versions = get_all_versions
-        rollback_to = all_versions.index(target_version.to_i) + 1
+        target_version_index = all_versions.index(target_version.to_i)
+        raise UnknownMigrationVersionError.new(target_version) if target_version_index.nil?
+
+        rollback_to = target_version_index + 1
         rollback_steps = all_versions.size - rollback_to
         rollback migrations_path, rollback_steps
       end
@@ -268,6 +291,14 @@ module Mongoid #:nodoc
         name
       end
 
+      def with_mongoid_client(mongoid_client_name, &block)
+        previous_mongoid_client_name = Thread.current[:mongoid_client_name]
+        Thread.current[:mongoid_client_name] = mongoid_client_name
+        block.call
+      ensure
+        Thread.current[:mongoid_client_name] = previous_mongoid_client_name
+      end
+
       private
 
       def move(direction, migrations_path, steps)
@@ -288,6 +319,10 @@ module Mongoid #:nodoc
       @direction, @migrations_path, @target_version = direction, migrations_path, target_version
     end
 
+    def client_match?(migration)
+      migration.client.to_s == (Thread.current[:mongoid_client_name] || "default").to_s
+    end
+
     def current_version
       migrated.last || 0
     end
@@ -296,12 +331,17 @@ module Mongoid #:nodoc
       migrations.detect { |m| m.version == current_version }
     end
 
+
     def run
       target = migrations.detect { |m| m.version == @target_version }
       raise UnknownMigrationVersionError.new(@target_version) if target.nil?
-      unless (up? && migrated.include?(target.version.to_i)) || (down? && !migrated.include?(target.version.to_i))
-        target.migrate(@direction)
-        record_version_state_after_migrating(target.version)
+      return unless client_match?(target)
+
+      with_mongoid_client(target.client) do
+        unless (up? && migrated.include?(target.version.to_i)) || (down? && !migrated.include?(target.version.to_i))
+          target.migrate(@direction)
+          record_version_state_after_migrating(target.version)
+        end
       end
     end
 
@@ -309,6 +349,7 @@ module Mongoid #:nodoc
       runnable = runnable_migrations
 
       runnable.each do |migration|
+        next unless client_match?(migration)
         Rails.logger.info "Migrating to #{migration.name} (#{migration.version})" if Rails.logger
 
         # On our way up, we skip migrating the ones we've already migrated
@@ -330,8 +371,10 @@ module Mongoid #:nodoc
         #   raise StandardError, "An error has occurred, #{canceled_msg}all later migrations canceled:\n\n#{e}", e.backtrace
         # end
         begin
-          migration.migrate(@direction)
-          record_version_state_after_migrating(migration.version)
+          with_mongoid_client(migration.client) do
+            migration.migrate(@direction)
+            record_version_state_after_migrating(migration.version)
+          end
         rescue => e
           output = Migration.buffer_output + "An error has occurred, #{migration.version} and all later migrations canceled:\n\n#{e}\n#{e.backtrace.join("\n")}"
           begin
@@ -352,6 +395,7 @@ module Mongoid #:nodoc
       puts "-" * 50
       up_migrations = migrated.to_set
       migrations.each do |migration|
+        next unless client_match?(migration)
         status = up_migrations.include?(migration.version.to_i) ? 'up' : 'down'
         puts "#{status.center(8)}  #{migration.version.to_s.ljust(14)}  #{migration.name}"
       end
@@ -430,10 +474,10 @@ module Mongoid #:nodoc
         # end
         if down?
           @migrated_versions.delete(version)
-          DataMigration.where(:version => version.to_s).first.destroy
+          DataMigration.where(:version => version.to_s).destroy_all
         else
           @migrated_versions.push(version).sort!
-          DataMigration.create(:version => version.to_s)
+          DataMigration.find_or_create_by(:version => version.to_s)
         end
       end
 

@@ -1,11 +1,5 @@
 require 'helper'
 
-# Hide task output
-class Mongoid::Migration
-  def self.puts _
-  end
-end
-
 module Mongoid
   class TestCase < Minitest::Test #:nodoc:
 
@@ -13,10 +7,9 @@ module Mongoid
       Mongoid::Migration.verbose = true
       Mongo::Logger.logger.level = 1
       # same as db:drop command in lib/mongoid_rails_migrations/mongoid_ext/railties/database.rake
-      if Mongoid.respond_to?(:default_client)
-        Mongoid.default_client.database.drop
-      else
-        Mongoid.default_session.drop
+      invoke("db:drop")
+      Mongoid::Migrator.with_mongoid_client("shard1") do
+        invoke("db:drop")
       end
     end
 
@@ -122,6 +115,12 @@ module Mongoid
 
       Mongoid::Migrator.rollback_to(MIGRATIONS_ROOT + "/valid", 20100513054656)
       assert_equal(20100513054656, Mongoid::Migrator.current_version)
+    end
+
+    def test_migrator_rollback_to_with_unknown_version_number
+      assert_raises(Mongoid::UnknownMigrationVersionError) do
+        Mongoid::Migrator.rollback_to(MIGRATIONS_ROOT + "/valid", '19901211124200')
+      end
     end
 
     def test_migrator_forward

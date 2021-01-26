@@ -9,7 +9,8 @@ require 'minitest/autorun'
 
 # Test setup
 MIGRATIONS_ROOT = 'test/migrations'
-Mongoid.configure.connect_to('mongoid_test')
+
+Mongoid.configure.load!("#{__dir__}/mongoid.yml", 'test')
 require 'models/survey_schema'
 
 module TestMongoidRailsMigrations
@@ -17,3 +18,21 @@ module TestMongoidRailsMigrations
 end
 
 TestMongoidRailsMigrations::Application.load_tasks
+
+# Hide task output
+class Mongoid::Migration
+  def self.puts _
+  end
+end
+
+def invoke(task)
+  Rake.application.tasks.each(&:reenable)
+  Rake::Task[task].invoke
+end
+
+def with_env(options)
+  options.keys.each { |key| ENV[key] = options[key] }
+  yield
+ensure
+  options.keys.each { |key| ENV.delete(key) }
+end
