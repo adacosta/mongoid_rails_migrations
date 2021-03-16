@@ -1,6 +1,6 @@
 class DefaultDatabaseMigration < Mongoid::Migration
   def self.up
-    SurveySchema.create(:id => 'default_migration',
+    SurveySchema.find_or_create_by(:id => 'default_migration',
                         :label => 'Default Survey')
   end
 

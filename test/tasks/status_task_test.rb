@@ -30,7 +30,7 @@ EOF
     end
 
     def test_multidatabase_migrate_status
-      Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_database"]
+      Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_shards"]
       output = <<-EOF
 
 database: mongoid_test
@@ -55,7 +55,7 @@ EOF
     end
 
     def test_multidatabase_migrate_status_in_target_client
-      Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_database"]
+      Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_shards"]
       with_env("MONGOID_CLIENT_NAME" => "shard1") do
         output = <<-EOF
 
@@ -63,8 +63,8 @@ database: mongoid_test_s1
 
  Status   Migration ID    Migration Name
 --------------------------------------------------
-  down    20210210124656  Shard1DatabaseMigration
-  down    20210210125532  Shard1DatabaseMigrationTwo
+  down    20210210124656  ShardDatabaseMigration
+  down    20210210125532  ShardDatabaseMigrationTwo
 EOF
         assert_output(output) { invoke("db:migrate:status") }
         invoke("db:migrate")
@@ -74,8 +74,8 @@ database: mongoid_test_s1
 
  Status   Migration ID    Migration Name
 --------------------------------------------------
-   up     20210210124656  Shard1DatabaseMigration
-   up     20210210125532  Shard1DatabaseMigrationTwo
+   up     20210210124656  ShardDatabaseMigration
+   up     20210210125532  ShardDatabaseMigrationTwo
 EOF
         assert_output(output) { invoke("db:migrate:status") }
       end

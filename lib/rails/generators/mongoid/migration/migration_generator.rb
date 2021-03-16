@@ -3,10 +3,16 @@ require 'rails/generators/mongoid/mongoid_generator'
 module Mongoid
   module Generators
     class MigrationGenerator < Base
-      argument :client_name, type: :string, optional: true, banner: "client_name"
+      class_option :shards, type: :boolean, optional: true, desc: "Create migration in shards subfolder"
 
       def create_migration_file
-        migration_template "migration.rb", "db/migrate/#{file_name}.rb"
+        destination_folder = "db/migrate"
+        if options[:shards]
+          destination_folder = "#{destination_folder}/shards"
+          FileUtils.mkdir_p("#{Rails.root}/#{destination_folder}")
+        end
+
+        migration_template "migration.rb", "#{destination_folder}/#{file_name}.rb"
       end
 
       protected

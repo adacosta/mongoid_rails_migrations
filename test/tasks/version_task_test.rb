@@ -12,7 +12,7 @@ module Mongoid
     end
 
     def test_multidatabase_version
-      Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_database"]
+      Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_shards"]
       assert_output("0\n") { invoke("db:version") }
       invoke("db:migrate")
       assert_output("20210210125800\n") { invoke("db:version") }
@@ -21,7 +21,7 @@ module Mongoid
     end
 
     def test_multidatabase_version_with_target_client
-      Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_database"]
+      Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_shards"]
       with_env("MONGOID_CLIENT_NAME" => "shard1") do
         assert_output("0\n") { invoke("db:version") }
         invoke("db:migrate")

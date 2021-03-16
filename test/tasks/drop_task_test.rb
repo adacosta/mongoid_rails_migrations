@@ -11,7 +11,7 @@ module Mongoid
     end
   
     def test_drop_multidatabase
-      Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_database"]
+      Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_shards"]
       invoke("db:migrate")
       assert_output("20210210125800\n") { invoke("db:version") }
       with_env("MONGOID_CLIENT_NAME" => "shard1") do
@@ -28,7 +28,7 @@ module Mongoid
 
         
     def test_drop_multidatabase_on_target_client
-      Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_database"]
+      Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_shards"]
       invoke("db:migrate")
       assert_output("20210210125800\n") { invoke("db:version") }
       with_env("MONGOID_CLIENT_NAME" => "shard1") do

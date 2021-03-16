@@ -37,7 +37,7 @@ EOF
 
 
     def test_multidatabase_migrate_up
-      Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_database"]
+      Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_shards"]
       output = <<-EOF
 
 database: mongoid_test
@@ -54,8 +54,8 @@ database: mongoid_test_s1
 
  Status   Migration ID    Migration Name
 --------------------------------------------------
-  down    20210210124656  Shard1DatabaseMigration
-  down    20210210125532  Shard1DatabaseMigrationTwo
+  down    20210210124656  ShardDatabaseMigration
+  down    20210210125532  ShardDatabaseMigrationTwo
 EOF
 
       with_env("MONGOID_CLIENT_NAME" => "shard1", "VERSION" => "20210210124656") do
@@ -87,7 +87,7 @@ EOF
 
 
     def test_multidatabase_migrate_up_on_target_client
-      Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_database"]
+      Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_shards"]
       output = <<-EOF
 
 database: mongoid_test
@@ -104,8 +104,8 @@ database: mongoid_test_s1
 
  Status   Migration ID    Migration Name
 --------------------------------------------------
-  down    20210210124656  Shard1DatabaseMigration
-  down    20210210125532  Shard1DatabaseMigrationTwo
+  down    20210210124656  ShardDatabaseMigration
+  down    20210210125532  ShardDatabaseMigrationTwo
 EOF
 
       with_env("MONGOID_CLIENT_NAME" => "shard1", "VERSION" => "20210210124656") do
@@ -117,8 +117,8 @@ database: mongoid_test_s1
 
  Status   Migration ID    Migration Name
 --------------------------------------------------
-   up     20210210124656  Shard1DatabaseMigration
-  down    20210210125532  Shard1DatabaseMigrationTwo
+   up     20210210124656  ShardDatabaseMigration
+  down    20210210125532  ShardDatabaseMigrationTwo
 EOF
         assert_output(output) { invoke("db:migrate:status") }
       end
@@ -133,10 +133,8 @@ database: mongoid_test
 EOF
       assert_output(output) { invoke("db:migrate:status") }
       assert_equal(0, DataMigration.count)
-      assert_equal(0, SurveySchema.count)
       Mongoid::Migrator.with_mongoid_client("shard1") do
         assert_equal(1, DataMigration.count)
-        assert_equal(1, SurveySchema.count)
       end
     end
   end

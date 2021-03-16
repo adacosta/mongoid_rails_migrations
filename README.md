@@ -9,10 +9,13 @@ gem "mongoid_rails_migrations"
 
 Create migration
 ```
-$ rails generate mongoid:migration <your_migration_name_here> <you_client_name_here>
+$ rails generate mongoid:migration <your_migration_name_here>
 ```
 
-The client name is optional.
+You can also create migration for shards with:
+```
+$ rails generate mongoid:migration <your_migration_name_here> --shards
+```
 
 Run migrations:
 ```
@@ -44,6 +47,9 @@ Mongoid::Migration.after_migrate = ->(output, name, direction, crash) {
 
 # Compatibility
 
+* `1.5.x` targets Mongoid >= `5.0` and Rails >= `4.2`
+* `1.4.x` targets Mongoid >= `4.0` and Rails >= `4.2`
+* `1.3.x` targets Mongoid >= `4.0` and Rails >= `4.2`
 * `1.2.x` targets Mongoid >= `4.0` and Rails >= `4.2`
 * `1.1.x` targets Mongoid >= `4.0` and Rails >= `4.2`
 * `1.0.0` targers Mongoid >= `3.0` and Rails >= `3.2`
@@ -56,8 +62,9 @@ Mongoid::Migration.after_migrate = ->(output, name, direction, crash) {
 ## 1.5.0
 _26/02/2021_
 [Compare master with 1.4.0](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.4.0...master)
-* Rake tasks updated to support a custom client with the `MONGOID_CLIENT_NAME` environment variable
-* Migrations now support custom client name
+* Add support of multi shards databases
+* Shards migrations can now be stored in a `shards` subfolder inside the migration folder
+* All Rake tasks now support a custom client with the `MONGOID_CLIENT_NAME` environment variable
 
 ## 1.4.0
 _08/01/2021_

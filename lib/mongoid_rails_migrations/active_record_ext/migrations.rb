@@ -64,8 +64,6 @@ module Mongoid #:nodoc
     cattr_accessor :verbose, :after_migrate, :buffer_output
 
     class << self
-      attr_accessor :mongoid_client_name
-
       def up_with_benchmarks #:nodoc:
         migrate(:up)
       end
@@ -153,28 +151,14 @@ module Mongoid #:nodoc
         self.verbose = save
       end
 
-      def client(mongoid_client_name = nil)
-        if mongoid_client_name
-          self.mongoid_client_name = mongoid_client_name
-        else
-          self.mongoid_client_name || 'default'
-        end
-      end
-
       def connection
         # ActiveRecord::Base.connection
-        if mongoid_client_name = Thread.current[:mongoid_client_name]
-          if ::Mongoid.respond_to?(:client)
-            ::Mongoid.client(mongoid_client_name)
-          else
-            ::Mongoid.session(mongoid_client_name)
+        if ENV['MONGOID_CLIENT_NAME']
+          Migrator.with_mongoid_client(ENV['MONGOID_CLIENT_NAME']) do
+            Mongoid.client(Mongoid::Threaded.client_override)
           end
         else
-          if ::Mongoid.respond_to?(:default_client)
-            ::Mongoid.default_client
-          else
-            ::Mongoid.default_session
-          end
+          Mongoid.default_client
         end
       end
 
@@ -195,9 +179,9 @@ module Mongoid #:nodoc
   # until they are needed
   class MigrationProxy
 
-    attr_accessor :name, :version, :filename
+    attr_accessor :name, :version, :filename, :sharded
 
-    delegate :migrate, :announce, :write, :client, :to=>:migration
+    delegate :migrate, :announce, :write, :to=>:migration
 
     private
 
@@ -272,7 +256,9 @@ module Mongoid #:nodoc
       def get_all_versions
         # table = Arel::Table.new(schema_migrations_table_name)
         #         Base.connection.select_values(table.project(table['version']).to_sql).map(&:to_i).sort
-        DataMigration.all.map { |datamigration| datamigration.version.to_i }.sort
+        with_mongoid_client(ENV['MONGOID_CLIENT_NAME']) do
+          DataMigration.all.map { |datamigration| datamigration.version.to_i }.sort
+        end
       end
 
       def current_version
@@ -292,11 +278,11 @@ module Mongoid #:nodoc
       end
 
       def with_mongoid_client(mongoid_client_name, &block)
-        previous_mongoid_client_name = Thread.current[:mongoid_client_name]
-        Thread.current[:mongoid_client_name] = mongoid_client_name
+        previous_mongoid_client_name = Mongoid::Threaded.client_override
+        Mongoid.override_client(mongoid_client_name)
         block.call
       ensure
-        Thread.current[:mongoid_client_name] = previous_mongoid_client_name
+        Mongoid.override_client(previous_mongoid_client_name)
       end
 
       private
@@ -317,10 +303,11 @@ module Mongoid #:nodoc
       # raise StandardError.new("This database does not yet support migrations") unless Base.connection.supports_migrations?
       # Base.connection.initialize_schema_migrations_table
       @direction, @migrations_path, @target_version = direction, migrations_path, target_version
-    end
 
-    def client_match?(migration)
-      migration.client.to_s == (Thread.current[:mongoid_client_name] || "default").to_s
+      @mongoid_client_name = ENV["MONGOID_CLIENT_NAME"]
+      if @mongoid_client_name && !Mongoid.clients.has_key?(@mongoid_client_name)
+        raise Mongoid::Errors::NoClientConfig.new(@mongoid_client_name)
+      end
     end
 
     def current_version
@@ -335,11 +322,10 @@ module Mongoid #:nodoc
     def run
       target = migrations.detect { |m| m.version == @target_version }
       raise UnknownMigrationVersionError.new(@target_version) if target.nil?
-      return unless client_match?(target)
 
-      with_mongoid_client(target.client) do
-        unless (up? && migrated.include?(target.version.to_i)) || (down? && !migrated.include?(target.version.to_i))
-          target.migrate(@direction)
+      unless (up? && migrated.include?(target.version.to_i)) || (down? && !migrated.include?(target.version.to_i))
+        target.migrate(@direction)
+        with_mongoid_client(@mongoid_client_name) do
           record_version_state_after_migrating(target.version)
         end
       end
@@ -349,7 +335,6 @@ module Mongoid #:nodoc
       runnable = runnable_migrations
 
       runnable.each do |migration|
-        next unless client_match?(migration)
         Rails.logger.info "Migrating to #{migration.name} (#{migration.version})" if Rails.logger
 
         # On our way up, we skip migrating the ones we've already migrated
@@ -371,8 +356,8 @@ module Mongoid #:nodoc
         #   raise StandardError, "An error has occurred, #{canceled_msg}all later migrations canceled:\n\n#{e}", e.backtrace
         # end
         begin
-          with_mongoid_client(migration.client) do
-            migration.migrate(@direction)
+          migration.migrate(@direction)
+          with_mongoid_client(@mongoid_client_name) do
             record_version_state_after_migrating(migration.version)
           end
         rescue => e
@@ -395,7 +380,6 @@ module Mongoid #:nodoc
       puts "-" * 50
       up_migrations = migrated.to_set
       migrations.each do |migration|
-        next unless client_match?(migration)
         status = up_migrations.include?(migration.version.to_i) ? 'up' : 'down'
         puts "#{status.center(8)}  #{migration.version.to_s.ljust(14)}  #{migration.name}"
       end
@@ -404,7 +388,7 @@ module Mongoid #:nodoc
     def migrations
       @migrations ||= begin
         files = Array(@migrations_path).inject([]) do |files, path|
-          files += Dir["#{path}/[0-9]*_*.rb"]
+          files += Dir["#{path}/**/[0-9]*_*.rb"]
         end
 
         migrations = files.inject([]) do |klasses, file|
@@ -422,10 +406,15 @@ module Mongoid #:nodoc
           end
 
           migration = MigrationProxy.new
+          migration.sharded  = file.match?(/\/shards\/#{version}_#{name}\.rb/)
           migration.name     = name.camelize
           migration.version  = version
           migration.filename = file
-          klasses << migration
+
+          if (@mongoid_client_name && migration.sharded) || (!@mongoid_client_name && !migration.sharded)
+            klasses << migration
+          end
+          klasses
         end
 
         migrations = migrations.sort_by(&:version)

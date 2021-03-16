@@ -1,8 +1,6 @@
-class Shard1DatabaseMigration < Mongoid::Migration
-  client :shard1
-
+class ShardDatabaseMigration < Mongoid::Migration
   def self.up
-    SurveySchema.create(:id => 'sharded_migration',
+    SurveySchema.find_or_create_by(:id => 'sharded_migration',
                         :label => 'Sharded Survey')
   end
 

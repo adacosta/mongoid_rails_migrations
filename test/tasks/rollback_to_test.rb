@@ -36,7 +36,7 @@ EOF
   end
 
   def test_multidatabase_rollback_to
-    Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_database"]
+    Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_shards"]
     invoke("db:migrate")
     output = <<-EOF
 
@@ -56,8 +56,8 @@ database: mongoid_test_s1
 
 Status   Migration ID    Migration Name
 --------------------------------------------------
- up     20210210124656  Shard1DatabaseMigration
- up     20210210125532  Shard1DatabaseMigrationTwo
+ up     20210210124656  ShardDatabaseMigration
+ up     20210210125532  ShardDatabaseMigrationTwo
 EOF
       ) { invoke("db:migrate:status") }
     end
@@ -79,14 +79,14 @@ database: mongoid_test_s1
 
 Status   Migration ID    Migration Name
 --------------------------------------------------
- up     20210210124656  Shard1DatabaseMigration
- up     20210210125532  Shard1DatabaseMigrationTwo
+ up     20210210124656  ShardDatabaseMigration
+ up     20210210125532  ShardDatabaseMigrationTwo
 EOF
       ) { invoke("db:migrate:status") }
     end
 
     def test_multidatabase_rollback_to_client_target
-      Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_database"]
+      Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_shards"]
       invoke("db:migrate")
       output = <<-EOF
 
@@ -106,8 +106,8 @@ database: mongoid_test_s1
 
  Status   Migration ID    Migration Name
 --------------------------------------------------
-   up     20210210124656  Shard1DatabaseMigration
-   up     20210210125532  Shard1DatabaseMigrationTwo
+   up     20210210124656  ShardDatabaseMigration
+   up     20210210125532  ShardDatabaseMigrationTwo
 EOF
         assert_output(output) { invoke("db:migrate:status") }
         with_env("VERSION" => "20210210124656") { invoke("db:rollback_to") }
@@ -117,8 +117,8 @@ database: mongoid_test_s1
 
  Status   Migration ID    Migration Name
 --------------------------------------------------
-   up     20210210124656  Shard1DatabaseMigration
-  down    20210210125532  Shard1DatabaseMigrationTwo
+   up     20210210124656  ShardDatabaseMigration
+  down    20210210125532  ShardDatabaseMigrationTwo
 EOF
         assert_output(output) { invoke("db:migrate:status") }
       end
