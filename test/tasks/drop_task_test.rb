@@ -9,7 +9,7 @@ module Mongoid
       invoke("db:drop")
       assert_output("0\n") { invoke("db:version") }
     end
-  
+
     def test_drop_multidatabase
       Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_shards"]
       invoke("db:migrate")
@@ -26,7 +26,7 @@ module Mongoid
       end
     end
 
-        
+
     def test_drop_multidatabase_on_target_client
       Mongoid::Migrator.migrations_path = [MIGRATIONS_ROOT + "/multi_shards"]
       invoke("db:migrate")

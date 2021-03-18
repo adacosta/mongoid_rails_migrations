@@ -70,7 +70,6 @@ namespace :db do
     desc 'Runs the "down" for a given migration VERSION.'
     task :down => :environment do
       version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
-
       raise "VERSION is required" unless version
       Mongoid::Migrator.run(:down, Mongoid::Migrator.migrations_path, version)
     end
