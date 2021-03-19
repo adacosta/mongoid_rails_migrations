@@ -1,18 +1,19 @@
 language: ruby
+dist: bionic
 cache: bundler
 services: mongodb
 rvm:
   - 2.5.7
   - 2.6.5
   - 2.7.0
-  - jruby-head
+  - jruby-9.2.14.0
 gemfile:
-  - test/gemfiles/rails-5.0-mongoid-6.x
-  - test/gemfiles/rails-5.2-mongoid-7.x
-  - test/gemfiles/rails-6.0-mongoid-7.x
+  - gemfiles/rails-5.0-mongoid-6.x
+  - gemfiles/rails-5.2-mongoid-7.x
+  - gemfiles/rails-6.0-mongoid-7.x
 matrix:
   include:
     - rvm: 2.4.9
-      gemfile: test/gemfiles/rails-4.2-mongoid-5.x
-    - rvm: 2.7.0
-      gemfile: test/gemfiles/rails-edge
+      gemfile: gemfiles/rails-4.2-mongoid-5.x
+    - rvm: 3.0.0
+      gemfile: gemfiles/rails-edge

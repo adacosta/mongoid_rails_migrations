@@ -1,3 +1,3 @@
 source "https://rubygems.org"
-gemspec path: "../.."
+gemspec path: ".."
 gem 'rails', '~> 4.2.0'
