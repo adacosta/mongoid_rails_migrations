@@ -82,16 +82,6 @@ EOF
       invoke("db:migrate")
       with_env("MONGOID_CLIENT_NAME" => "shard1") do
         assert_output(output) { invoke("db:migrate:status") }
-        output = <<-EOF
-
-database: mongoid_test_s1
-
- Status   Migration ID    Migration Name
---------------------------------------------------
-  down    20210210124656  ShardDatabaseMigration
-  down    20210210125532  ShardDatabaseMigrationTwo
-EOF
-        assert_output(output) { invoke("db:migrate:status") }
       end
       output = <<-EOF
 

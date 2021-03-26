@@ -63,7 +63,7 @@ database: mongoid_test_s1
    up     20210210125532  ShardDatabaseMigrationTwo
 EOF
 
-      with_env("MONGOID_CLIENT_NAME" => "shard1", "VERSION" => "20210210124656") do
+      with_env("MONGOID_CLIENT_NAME" => "shard1") do
         assert_output(output) { invoke("db:migrate:status") }
       end
       with_env("VERSION" => "20210210125000") do
@@ -78,7 +78,7 @@ database: mongoid_test_s1
    up     20210210124656  ShardDatabaseMigration
    up     20210210125532  ShardDatabaseMigrationTwo
 EOF
-      with_env("MONGOID_CLIENT_NAME" => "shard1", "VERSION" => "20210210124656") do
+      with_env("MONGOID_CLIENT_NAME" => "shard1") do
         assert_output(output) { invoke("db:migrate:status") }
       end
       output = <<-EOF

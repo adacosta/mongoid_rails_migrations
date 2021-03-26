@@ -19,9 +19,9 @@ database: mongoid_test
   down    20100513063902  AddImprovementPlanSurveySchema
 EOF
       ) { invoke("db:migrate:status") }
-      ENV["VERSION"] = "20100513055502"
-      invoke("db:migrate:up")
-      ENV.delete("VERSION")
+      with_env("VERSION" => "20100513055502") do
+        invoke("db:migrate:up")
+      end
       assert_output(<<-EOF
 
 database: mongoid_test
