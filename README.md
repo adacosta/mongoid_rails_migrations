@@ -12,11 +12,6 @@ Create migration
 $ rails generate mongoid:migration <your_migration_name_here>
 ```
 
-You can also create migration for shards with:
-```
-$ rails generate mongoid:migration <your_migration_name_here> --shards
-```
-
 Run migrations:
 ```
 $ rails db:migrate
@@ -31,19 +26,39 @@ $ rails db:reseed (handled by mongoid)
 $ rails db:version
 ```
 
-All the taks listed above support the `MONGOID_CLIENT_NAME` environment variable in order to use multiple databases.
-
-To override the default migrations path (`db/migrate`), add the following line to your `application.rb` file:
-```
-Mongoid::Migrator.migrations_path = ['foo/bar/db/migrate', 'path/to/db/migrate']
-```
-
 If you want to use output migration use the hook `after_migrate`
 ```
 Mongoid::Migration.after_migrate = ->(output, name, direction, crash) {
   upload_to_s3(name, output, direction) if crash == false
 }
 ```
+
+To override the default migrations path (`db/migrate`), add the following line to your `application.rb` file:
+```
+Mongoid::Migrator.migrations_path = ['foo/bar/db/migrate', 'path/to/db/migrate']
+```
+
+## Multi databases support
+
+Default behavior is to store migrations in the `default` client database but for projects that require horizontal scalabilty, this gem supports migrations [sharding](https://en.wikipedia.org/wiki/Shard_\(database_architecture\)).
+
+To generate a migration that can be run on shards, suffix the migration generator command with `--shards` like:
+
+```
+$ rails generate mongoid:migration <your_migration_name_here> --shards
+```
+
+The migration will be created and stored in `db/migrate/shards` folder.
+
+In order to manage a sharded migration, run tasks with the `MONGOID_CLIENT_NAME` environment variable:
+
+```
+$ rails db:migrate MONGOID_CLIENT_NAME=shard42
+```
+
+The shards migrations will be executed and entries will be added in the `shard42` database.
+
+All the rake tasks support the `MONGOID_CLIENT_NAME` environment variable.
 
 # Compatibility
 
@@ -60,9 +75,9 @@ Mongoid::Migration.after_migrate = ->(output, name, direction, crash) {
 ## Unreleased
 
 ## 1.5.0
-_26/02/2021_
+_26/03/2021_
 [Compare master with 1.4.0](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.4.0...master)
-* Add support of multi shards databases
+* Add support of multi databases
 * Shards migrations can now be stored in a `shards` subfolder inside the migration folder
 * All Rake tasks now support a custom client with the `MONGOID_CLIENT_NAME` environment variable
 
