@@ -64,7 +64,7 @@ EOF
       with_env("VERSION" => "20210210125000") do
         invoke("db:migrate:up")
       end
-      with_env("MONGOID_CLIENT_NAME" => "shard1", "VERSION" => "20210210124656") do
+      with_env("MONGOID_CLIENT_NAME" => "shard1") do
         assert_output(output) { invoke("db:migrate:status") }
       end
       output = <<-EOF
