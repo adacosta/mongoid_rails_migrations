@@ -20,6 +20,7 @@ module Mongoid
       end
       invoke("db:drop")
       assert_output("0\n") { invoke("db:version") }
+      with_env("MONGOID_CLIENT_NAME" => "shard1") { assert_output("20210210125532\n") { invoke("db:version") } }
     end
 
 
