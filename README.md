@@ -50,13 +50,32 @@ $ rails generate mongoid:migration <your_migration_name_here> --shards
 
 The migration will be created and stored in `db/migrate/shards` folder.
 
+With the following configuration:
+
+```yaml
+production:
+  clients:
+    default:
+      database: my_production_db
+      hosts:
+        - 4.2.4.2:27017
+    shard1:
+      database: my_shard1_production_db
+      hosts:
+        - 5.3.5.3:27017
+    shard2:
+      database: my_shard2_production_db
+      hosts:
+        - 6.4.6.4:27017
+```
+
 In order to manage a sharded migration, run tasks with the `MONGOID_CLIENT_NAME` environment variable:
 
 ```
-$ rails db:migrate MONGOID_CLIENT_NAME=shard42
+$ rails db:migrate MONGOID_CLIENT_NAME=shard2
 ```
 
-The shards migrations will be executed and entries will be added in the `shard42` database.
+The shards migrations will be executed and entries will be added in the `my_shard2_production_db` database.
 
 All the rake tasks support the `MONGOID_CLIENT_NAME` environment variable.
 
