@@ -1,9 +1,11 @@
 namespace :db do
-  unless Rake::Task.task_defined?("db:drop")
-    desc 'Drops all the collections for the database for the current Rails.env'
-    task :drop => :environment do
-      Mongoid.master.collections.each {|col| col.drop_indexes && col.drop unless ['system.indexes', 'system.users'].include?(col.name) }
-    end
+  if Rake::Task.task_defined?("db:drop")
+    Rake::Task["db:drop"].clear
+  end
+
+  desc 'Drops all the collections for the database for the current Rails.env'
+  task :drop => :environment do
+    Mongoid::Migration.connection.database.drop
   end
 
   unless Rake::Task.task_defined?("db:seed")
@@ -43,7 +45,7 @@ namespace :db do
   end
 
   namespace :migrate do
-    desc  'Rollback the database one migration and re migrate up. If you want to rollback more than one step, define STEP=x. Target specific version with VERSION=x.'
+    desc 'Rollback the database one migration and re migrate up. If you want to rollback more than one step, define STEP=x. Target specific version with VERSION=x.'
     task :redo => :environment do
       if ENV["VERSION"]
         Rake::Task["db:migrate:down"].invoke
