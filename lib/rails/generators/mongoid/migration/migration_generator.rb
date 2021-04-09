@@ -7,7 +7,7 @@ module Mongoid
 
       def create_migration_file
         destination_folder = "db/migrate"
-        if options[:shards]
+        if options.fetch(:shards, Config.shards_migration_as_default)
           destination_folder = "#{destination_folder}/shards"
           FileUtils.mkdir_p("#{Rails.root}/#{destination_folder}")
         end
