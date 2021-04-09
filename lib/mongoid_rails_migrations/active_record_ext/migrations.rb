@@ -55,7 +55,7 @@ module Mongoid #:nodoc
   # If you'd prefer to use numeric prefixes, you can turn timestamped migrations
   # off by setting:
   #
-  #    Mongoid.config.timestamped_migrations = false
+  #    Mongoid.configure.timestamped_migrations = false
   #
   # In environment.rb.
   #

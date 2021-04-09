@@ -79,6 +79,16 @@ The shards migrations will be executed and entries will be added in the `my_shar
 
 All the rake tasks support the `MONGOID_CLIENT_NAME` environment variable.
 
+To make shards migrations the default migration type, add the following line in your config:
+
+```ruby
+# config/application.rb
+
+Mongoid.configure.shards_migration_as_default = true
+```
+
+Global migrations can still be created with the `--no-shards` option.
+
 # Compatibility
 
 * `1.5.x` targets Mongoid >= `5.0` and Rails >= `4.2`
