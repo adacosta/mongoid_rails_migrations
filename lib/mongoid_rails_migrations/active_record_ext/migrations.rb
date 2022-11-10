@@ -222,7 +222,7 @@ module Mongoid #:nodoc
       end
 
       def migrations_path
-        @migrations_path ||= ['db/migrate']
+        @migrations_path ||= [ENV['MONGOID_MIGRATION_PATH'] || 'db/migrate']
       end
 
       # def schema_migrations_table_name
