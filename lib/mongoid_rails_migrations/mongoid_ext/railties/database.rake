@@ -1,38 +1,4 @@
 namespace :db do
-  if Rake::Task.task_defined?("db:drop")
-    Rake::Task["db:drop"].clear
-  end
-
-  desc 'Drops all the collections for the database for the current Rails.env'
-  task :drop => :environment do
-    Mongoid::Migration.connection.database.drop
-  end
-
-  unless Rake::Task.task_defined?("db:seed")
-    # if another ORM has defined db:seed, don't run it twice.
-    desc 'Load the seed data from db/seeds.rb'
-    task :seed => :environment do
-      seed_file = File.join(Rails.application.root, 'db', 'seeds.rb')
-      load(seed_file) if File.exist?(seed_file)
-    end
-  end
-
-  unless Rake::Task.task_defined?("db:setup")
-    desc 'Create the database, and initialize with the seed data'
-    task :setup => [ 'db:create', 'db:seed' ]
-  end
-
-  unless Rake::Task.task_defined?("db:reseed")
-    desc 'Delete data and seed'
-    task :reseed => [ 'db:drop', 'db:seed' ]
-  end
-
-  unless Rake::Task.task_defined?("db:create")
-    task :create => :environment do
-      # noop
-    end
-  end
-
   desc 'Current database version'
   task :version => :environment do
     puts Mongoid::Migrator.current_version.to_s
@@ -91,17 +57,5 @@ namespace :db do
     version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
     raise "VERSION is required" unless version
     Mongoid::Migrator.rollback_to(Mongoid::Migrator.migrations_path, version)
-  end
-
-  namespace :schema do
-    task :load do
-      # noop
-    end
-  end
-
-  namespace :test do
-    task :prepare do
-      # Stub out for MongoDB
-    end
   end
 end
