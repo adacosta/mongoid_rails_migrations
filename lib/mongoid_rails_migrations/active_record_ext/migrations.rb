@@ -151,7 +151,6 @@ module Mongoid #:nodoc
       end
 
       def connection
-        # ActiveRecord::Base.connection
         if ENV['MONGOID_CLIENT_NAME']
           Mongoid.client(ENV['MONGOID_CLIENT_NAME'])
         else
@@ -164,22 +163,20 @@ module Mongoid #:nodoc
   # MigrationProxy is used to defer loading of the actual migration classes
   # until they are needed
   class MigrationProxy
-
     attr_accessor :name, :version, :filename, :sharded
 
     delegate :migrate, :announce, :write, :to=>:migration
 
     private
 
-      def migration
-        @migration ||= load_migration
-      end
+    def migration
+      @migration ||= load_migration
+    end
 
-      def load_migration
-        require(File.expand_path(filename))
-        name.constantize
-      end
-
+    def load_migration
+      require(File.expand_path(filename))
+      name.constantize
+    end
   end
 
   class Migrator#:nodoc:
@@ -234,33 +231,14 @@ module Mongoid #:nodoc
         @migrations_path ||= ['db/migrate']
       end
 
-      # def schema_migrations_table_name
-      #   # Base.table_name_prefix + 'schema_migrations' + Base.table_name_suffix
-      #   'data_migrations'
-      # end
-
       def get_all_versions
-        # table = Arel::Table.new(schema_migrations_table_name)
-        #         Base.connection.select_values(table.project(table['version']).to_sql).map(&:to_i).sort
         with_mongoid_client(ENV['MONGOID_CLIENT_NAME']) do
           DataMigration.all.map { |datamigration| datamigration.version.to_i }.sort
         end
       end
 
       def current_version
-        # sm_table = schema_migrations_table_name
-        # if Base.connection.table_exists?(sm_table)
-        #   get_all_versions.max || 0
-        # else
-        #   0
-        # end
         get_all_versions.max || 0
-      end
-
-      def proper_table_name(name)
-        # Use the Active Record objects own table_name, or pre/suffix from ActiveRecord::Base if name is a symbol/string
-        # name.table_name rescue "#{ActiveRecord::Base.table_name_prefix}#{name}#{ActiveRecord::Base.table_name_suffix}"
-        name
       end
 
       def with_mongoid_client(mongoid_client_name, &block)
@@ -286,8 +264,6 @@ module Mongoid #:nodoc
     end
 
     def initialize(direction, migrations_path, target_version = nil)
-      # raise StandardError.new("This database does not yet support migrations") unless Base.connection.supports_migrations?
-      # Base.connection.initialize_schema_migrations_table
       @direction, @migrations_path, @target_version = direction, migrations_path, target_version
 
       @mongoid_client_name = ENV["MONGOID_CLIENT_NAME"]
@@ -303,7 +279,6 @@ module Mongoid #:nodoc
     def current_migration
       migrations.detect { |m| m.version == current_version }
     end
-
 
     def run
       target = migrations.detect { |m| m.version == @target_version }
@@ -332,15 +307,6 @@ module Mongoid #:nodoc
           next
         end
 
-        # begin
-        #   ddl_transaction do
-        #     migration.migrate(@direction)
-        #     record_version_state_after_migrating(migration.version)
-        #   end
-        # rescue => e
-        #   canceled_msg = Base.connection.supports_ddl_transactions? ? "this and " : ""
-        #   raise StandardError, "An error has occurred, #{canceled_msg}all later migrations canceled:\n\n#{e}", e.backtrace
-        # end
         begin
           migration.migrate(@direction)
           with_mongoid_client(@mongoid_client_name) do
@@ -436,42 +402,24 @@ module Mongoid #:nodoc
     end
 
     private
-      def record_version_state_after_migrating(version)
-        # table = Arel::Table.new(self.class.schema_migrations_table_name)
 
-        @migrated_versions ||= []
-        # if down?
-        #   @migrated_versions.delete(version)
-        #   table.where(table["version"].eq(version.to_s)).delete
-        # else
-        #   @migrated_versions.push(version).sort!
-        #   table.insert table["version"] => version.to_s
-        # end
-        if down?
-          @migrated_versions.delete(version)
-          DataMigration.where(:version => version.to_s).destroy_all
-        else
-          @migrated_versions.push(version).sort!
-          DataMigration.find_or_create_by(:version => version.to_s)
-        end
+    def record_version_state_after_migrating(version)
+      @migrated_versions ||= []
+      if down?
+        @migrated_versions.delete(version)
+        DataMigration.where(:version => version.to_s).destroy_all
+      else
+        @migrated_versions.push(version).sort!
+        DataMigration.find_or_create_by(:version => version.to_s)
       end
+    end
 
-      def up?
-        @direction == :up
-      end
+    def up?
+      @direction == :up
+    end
 
-      def down?
-        @direction == :down
-      end
-
-      # Wrap the migration in a transaction only if supported by the adapter.
-      def ddl_transaction(&block)
-        # if Base.connection.supports_ddl_transactions?
-        #   Base.transaction { block.call }
-        # else
-        #   block.call
-        # end
-        block.call
-      end
+    def down?
+      @direction == :down
+    end
   end
 end

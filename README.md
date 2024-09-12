@@ -100,13 +100,18 @@ Global migrations can still be created with the `--no-shards` option.
 
 ## Unreleased
 
+[Compare master with 1.6.0](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.6.0...master)
+
+## 1.6.0
+_12/09/2024_
 * Remove unnecessary purge, setup, reset, etc. rake tasks because they are already defined by Mongoid (#60)
 * Minor tests improvements
 * Rejects Mongoid 9.0 for the moment because it broke client override isolation: https://jira.mongodb.org/browse/MONGOID-5815
+* Setup Github Actions to replace Travis CI (because It could not be fixed without the maintainer, see #55)
+* Remove some legacy comments and unreachable code
 
 ## 1.5.0
 _26/03/2021_
-[Compare master with 1.5.0](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.5.0...master)
 * Add support of multi databases
 * Shards migrations can now be stored in a `shards` subfolder inside the migration folder
 * All Rake tasks now support a custom client with the `MONGOID_CLIENT_NAME` environment variable
