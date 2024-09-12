@@ -102,6 +102,7 @@ Global migrations can still be created with the `--no-shards` option.
 
 * Remove unnecessary purge, setup, reset, etc. rake tasks because they are already defined by Mongoid (#60)
 * Minor tests improvements
+* Rejects Mongoid 9.0 for the moment because it broke client override isolation: https://jira.mongodb.org/browse/MONGOID-5815
 
 ## 1.5.0
 _26/03/2021_

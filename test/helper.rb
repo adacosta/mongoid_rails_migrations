@@ -10,7 +10,11 @@ require 'minitest/autorun'
 # Test setup
 MIGRATIONS_ROOT = 'test/migrations'
 
-Mongoid.configure.load!("#{__dir__}/mongoid.yml", 'test')
+Mongoid.load_configuration(clients: {
+  default: { hosts: ['localhost:27017'], database: 'mongoid_test' },
+  shard1: { hosts: ['localhost:27017'], database: 'mongoid_test_s1' }
+})
+
 require_relative 'models/survey_schema'
 
 module TestMongoidRailsMigrations
@@ -18,9 +22,6 @@ module TestMongoidRailsMigrations
 end
 
 TestMongoidRailsMigrations::Application.load_tasks
-
-# Mongo debug log
-# Mongo::Logger.logger = Logger.new(STDOUT)
 
 # Hide task output
 class Mongoid::Migration
