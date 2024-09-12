@@ -93,9 +93,6 @@ Global migrations can still be created with the `--no-shards` option.
 
 * `1.5.x` targets Mongoid >= `5.0` and Rails >= `4.2`
 * `1.4.x` targets Mongoid >= `4.0` and Rails >= `4.2`
-* `1.3.x` targets Mongoid >= `4.0` and Rails >= `4.2`
-* `1.2.x` targets Mongoid >= `4.0` and Rails >= `4.2`
-* `1.1.x` targets Mongoid >= `4.0` and Rails >= `4.2`
 * `1.0.0` targers Mongoid >= `3.0` and Rails >= `3.2`
 * `0.0.14` targets Mongoid >= `2.0` and Rails >= `3.0` (but < `3.2`)
 
@@ -103,16 +100,18 @@ Global migrations can still be created with the `--no-shards` option.
 
 ## Unreleased
 
+* Remove unnecessary purge, setup, reset, etc. rake tasks because they are already defined by Mongoid (#60)
+* Minor tests improvements
+
 ## 1.5.0
 _26/03/2021_
-[Compare master with 1.4.0](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.4.0...master)
+[Compare master with 1.5.0](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.5.0...master)
 * Add support of multi databases
 * Shards migrations can now be stored in a `shards` subfolder inside the migration folder
 * All Rake tasks now support a custom client with the `MONGOID_CLIENT_NAME` environment variable
 
 ## 1.4.0
 _08/01/2021_
-[Compare master with 1.3.0](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.3.0...master)
 * The hook `after_migrate` can be use when migration crash (#56)
 
 ## 1.3.0

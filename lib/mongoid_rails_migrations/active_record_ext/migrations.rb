@@ -103,7 +103,6 @@ module Mongoid #:nodoc
       # it is safe for the call to proceed.
       def singleton_method_added(sym) #:nodoc:
         return if defined?(@ignore_new_methods) && @ignore_new_methods
-
         begin
           @ignore_new_methods = true
 
@@ -154,22 +153,9 @@ module Mongoid #:nodoc
       def connection
         # ActiveRecord::Base.connection
         if ENV['MONGOID_CLIENT_NAME']
-          Migrator.with_mongoid_client(ENV['MONGOID_CLIENT_NAME']) do
-            Mongoid.client(Mongoid::Threaded.client_override)
-          end
+          Mongoid.client(ENV['MONGOID_CLIENT_NAME'])
         else
           Mongoid.default_client
-        end
-      end
-
-      def method_missing(method, *arguments, &block)
-        arg_list = arguments.map(&:inspect) * ', '
-
-        say_with_time "#{method}(#{arg_list})" do
-          # unless arguments.empty? || method == :execute
-          #   arguments[0] = Migrator.proper_table_name(arguments.first)
-          # end
-          connection.send(method, *arguments, &block)
         end
       end
     end

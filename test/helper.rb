@@ -11,13 +11,16 @@ require 'minitest/autorun'
 MIGRATIONS_ROOT = 'test/migrations'
 
 Mongoid.configure.load!("#{__dir__}/mongoid.yml", 'test')
-require 'models/survey_schema'
+require_relative 'models/survey_schema'
 
 module TestMongoidRailsMigrations
   class Application < Rails::Application; end
 end
 
 TestMongoidRailsMigrations::Application.load_tasks
+
+# Mongo debug log
+# Mongo::Logger.logger = Logger.new(STDOUT)
 
 # Hide task output
 class Mongoid::Migration

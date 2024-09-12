@@ -1,4 +1,14 @@
 namespace :db do
+  if Rake::Task.task_defined?("db:drop")
+    Rake::Task["db:drop"].clear
+  end
+
+  desc 'Drops the database for the current Mongoid client'
+  task :drop => :environment do
+    # Unlike Mongoid's default, this implementation supports the MONGOID_CLIENT_NAME override
+    Mongoid::Migration.connection.database.drop
+  end
+
   desc 'Current database version'
   task :version => :environment do
     puts Mongoid::Migrator.current_version.to_s

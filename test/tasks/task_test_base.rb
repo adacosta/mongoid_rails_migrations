@@ -1,4 +1,4 @@
-require 'helper'
+require_relative '../helper'
 
 load 'lib/mongoid_rails_migrations/mongoid_ext/railties/database.rake'
 

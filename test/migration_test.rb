@@ -4,11 +4,8 @@ module Mongoid
   class TestCase < Minitest::Test #:nodoc:
 
     def setup
-      Mongoid::Migration.verbose = true
-      Mongo::Logger.logger.level = 1
-      # same as db:drop command in lib/mongoid_rails_migrations/mongoid_ext/railties/database.rake
       invoke("db:drop")
-      Mongoid::Migrator.with_mongoid_client("shard1") do
+      with_env("MONGOID_CLIENT_NAME" => "shard1") do
         invoke("db:drop")
       end
     end
