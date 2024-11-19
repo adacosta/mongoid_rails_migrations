@@ -6,12 +6,12 @@ gem "mongoid_rails_migrations"
 ```
 
 Create migration
-```
+```console
 $ rails generate mongoid:migration <your_migration_name_here>
 ```
 
 Run migrations:
-```
+```console
 $ rails db:migrate
 $ rails db:migrate:down VERSION=
 $ rails db:migrate:up VERSION=
@@ -25,14 +25,14 @@ $ rails db:version
 ```
 
 If you want to use output migration use the hook `after_migrate`
-```
+```ruby
 Mongoid::Migration.after_migrate = ->(output, name, direction, crash) {
   upload_to_s3(name, output, direction) if crash == false
 }
 ```
 
 To override the default migrations path (`db/migrate`), add the following line to your `application.rb` file:
-```
+```ruby
 Mongoid::Migrator.migrations_path = ['foo/bar/db/migrate', 'path/to/db/migrate']
 ```
 
@@ -42,7 +42,7 @@ Default behavior is to store migrations in the `default` client database but for
 
 To generate a migration that can be run on shards, suffix the migration generator command with `--shards` like:
 
-```
+```console
 $ rails generate mongoid:migration <your_migration_name_here> --shards
 ```
 
@@ -69,7 +69,7 @@ production:
 
 In order to manage a sharded migration, run tasks with the `MONGOID_CLIENT_NAME` environment variable:
 
-```
+```console
 $ rails db:migrate MONGOID_CLIENT_NAME=shard2
 ```
 
@@ -98,7 +98,12 @@ Global migrations can still be created with the `--no-shards` option.
 
 ## Unreleased
 
-[Compare master with 1.6.0](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.6.0...master)
+[Compare master with 1.6.1](https://github.com/adacosta/mongoid_rails_migrations/compare/v1.6.1...master)
+
+## 1.6.1
+_19/11/2024_
+* Allow Mongoid 9.0.3+ now that the client override isolation bug has been fixed and released: https://jira.mongodb.org/browse/MONGOID-5815
+* Add testing gemfile for Rails 7 + Mongoid 9 to the matrix
 
 ## 1.6.0
 _12/09/2024_
@@ -139,9 +144,19 @@ _18/08/2015_
 
 # Tests
 
-```
+```console
+$ bundle install
 $ bundle exec rake
 ```
+
+Test a specific rails/mongoid version gemfile:
+
+```console
+$ BUNDLE_GEMFILE=gemfiles/rails8-mongoid9 bundle install
+$ BUNDLE_GEMFILE=gemfiles/rails8-mongoid9 bundle exec rake
+```
+
+Note: if you already ran the command a while ago, you can use `bundle update` instead of `bundle install` to fetch latest compatible versions.
 
 # Credits to
 

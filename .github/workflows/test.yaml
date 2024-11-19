@@ -12,7 +12,7 @@ jobs:
         gemfile:
           - rails6-mongoid7
           - rails7-mongoid8
-          # - rails7-mongoid9
+          - rails7-mongoid9
         include:
           - ruby_version: '2.4'
             gemfile: rails5-mongoid6
