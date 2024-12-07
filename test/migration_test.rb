@@ -4,9 +4,9 @@ module Mongoid
   class TestCase < Minitest::Test #:nodoc:
 
     def setup
-      invoke("db:drop")
+      invoke("db:mongoid:drop")
       with_env("MONGOID_CLIENT_NAME" => "shard1") do
-        invoke("db:drop")
+        invoke("db:mongoid:drop")
       end
     end
 
@@ -15,7 +15,7 @@ module Mongoid
     end
 
     def test_drop_works
-      assert_equal 0, Mongoid::Migrator.current_version, "db:drop should take us down to version 0"
+      assert_equal 0, Mongoid::Migrator.current_version, "db:mongoid:drop should take us down to version 0"
     end
 
     def test_migrations_path
