@@ -33,8 +33,7 @@ namespace :db do
     end
 
     desc 'Resets your database using your migrations for the current environment'
-    # should db:create be changed to db:setup? It makes more sense wanting to seed
-    task :reset => ["db:drop", "db:create", "db:migrate"]
+    task :reset => ["db:drop", "db:migrate"]
 
     desc 'Runs the "up" for a given migration VERSION.'
     task :up => :environment do
