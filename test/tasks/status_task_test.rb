@@ -14,8 +14,8 @@ database: mongoid_test
   down    20100513055502  AddSecondSurveySchema
   down    20100513063902  AddImprovementPlanSurveySchema
 EOF
-      ) { invoke("db:migrate:status") }
-      invoke("db:migrate")
+      ) { invoke("db:mongoid:migrate:status") }
+      invoke("db:mongoid:migrate")
       assert_output(<<-EOF
 
 database: mongoid_test
@@ -26,7 +26,7 @@ database: mongoid_test
    up     20100513055502  AddSecondSurveySchema
    up     20100513063902  AddImprovementPlanSurveySchema
 EOF
-      ) { invoke("db:migrate:status") }
+      ) { invoke("db:mongoid:migrate:status") }
     end
 
     def test_multidatabase_migrate_status
@@ -40,8 +40,8 @@ database: mongoid_test
   down    20210210125000  DefaultDatabaseMigration
   down    20210210125800  DefaultDatabaseMigrationTwo
 EOF
-      assert_output(output) { invoke("db:migrate:status") }
-      invoke("db:migrate")
+      assert_output(output) { invoke("db:mongoid:migrate:status") }
+      invoke("db:mongoid:migrate")
       output = <<-EOF
 
 database: mongoid_test
@@ -51,7 +51,7 @@ database: mongoid_test
    up     20210210125000  DefaultDatabaseMigration
    up     20210210125800  DefaultDatabaseMigrationTwo
 EOF
-      assert_output(output) { invoke("db:migrate:status") }
+      assert_output(output) { invoke("db:mongoid:migrate:status") }
     end
 
     def test_multidatabase_migrate_status_in_target_client
@@ -66,8 +66,8 @@ database: mongoid_test_s1
   down    20210210124656  ShardDatabaseMigration
   down    20210210125532  ShardDatabaseMigrationTwo
 EOF
-        assert_output(output) { invoke("db:migrate:status") }
-        invoke("db:migrate")
+        assert_output(output) { invoke("db:mongoid:migrate:status") }
+        invoke("db:mongoid:migrate")
         output = <<-EOF
 
 database: mongoid_test_s1
@@ -77,7 +77,7 @@ database: mongoid_test_s1
    up     20210210124656  ShardDatabaseMigration
    up     20210210125532  ShardDatabaseMigrationTwo
 EOF
-        assert_output(output) { invoke("db:migrate:status") }
+        assert_output(output) { invoke("db:mongoid:migrate:status") }
       end
     end
   end
