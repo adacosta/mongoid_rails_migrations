@@ -66,15 +66,15 @@ module Mongoid #:nodoc
 
     class << self
       def up_with_benchmarks #:nodoc:
-        migrate(:up, benchmark: true)
+        migrate(:up)
       end
 
       def down_with_benchmarks #:nodoc:
-        migrate(:down, benchmark: true)
+        migrate(:down)
       end
 
       # Execute this migration in the named direction
-      def migrate(direction, benchmark: false)
+      def migrate(direction)
         return unless respond_to?(direction)
 
         case direction
