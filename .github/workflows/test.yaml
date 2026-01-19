@@ -29,6 +29,8 @@ jobs:
         exclude:
           - ruby_version: 'jruby'
             gemfile: rails7-mongoid8 # JRuby 9.4.8 with Mongoid 8 has trouble finding the Logger::INFO constant
+          - ruby_version: '3.4'
+            gemfile: rails6-mongoid7 # Ruby 3.4 removed a number of standard libraries needed by Rails 6, which is EoL
 
     env:
       BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.gemfile }}
