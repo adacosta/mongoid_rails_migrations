@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'benchmark'
 
 module Mongoid #:nodoc
   # Exception that can be raised to stop migrations from going backwards.
@@ -65,15 +66,15 @@ module Mongoid #:nodoc
 
     class << self
       def up_with_benchmarks #:nodoc:
-        migrate(:up)
+        migrate(:up, benchmark: true)
       end
 
       def down_with_benchmarks #:nodoc:
-        migrate(:down)
+        migrate(:down, benchmark: true)
       end
 
       # Execute this migration in the named direction
-      def migrate(direction)
+      def migrate(direction, benchmark: false)
         return unless respond_to?(direction)
 
         case direction
