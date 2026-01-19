@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency('rails',  rails_version)
   spec.add_runtime_dependency('railties',  rails_version)
   spec.add_runtime_dependency('activesupport',  rails_version)
+  spec.add_runtime_dependency('benchmark')
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'minitest'
 end
