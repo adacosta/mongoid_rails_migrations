@@ -13,12 +13,15 @@ jobs:
           - rails6-mongoid7
           - rails7-mongoid8
           - rails7-mongoid9
-          - rails8-mongoid9
         include:
           - ruby_version: '2.4'
             gemfile: rails5-mongoid6
           - ruby_version: '2.5'
             gemfile: rails5-mongoid7
+          - ruby_version: '3.2'
+            gemfile: rails8-mongoid9
+          - ruby_version: '3.3'
+            gemfile: rails8-mongoid9
           - ruby_version: '3.3'
             gemfile: rails-edge
         exclude:
