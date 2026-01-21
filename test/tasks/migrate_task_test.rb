@@ -14,8 +14,8 @@ database: mongoid_test
   down    20100513055502  AddSecondSurveySchema
   down    20100513063902  AddImprovementPlanSurveySchema
 EOF
-      ) { invoke("db:migrate:status") }
-      invoke("db:migrate")
+      ) { invoke("db:mongoid:migrate:status") }
+      invoke("db:mongoid:migrate")
       assert_output(<<-EOF
 
 database: mongoid_test
@@ -26,7 +26,7 @@ database: mongoid_test
    up     20100513055502  AddSecondSurveySchema
    up     20100513063902  AddImprovementPlanSurveySchema
 EOF
-      ) { invoke("db:migrate:status") }
+      ) { invoke("db:mongoid:migrate:status") }
     end
 
     def test_database_migrate_with_version
@@ -41,8 +41,8 @@ database: mongoid_test
   down    20100513055502  AddSecondSurveySchema
   down    20100513063902  AddImprovementPlanSurveySchema
 EOF
-      ) { invoke("db:migrate:status") }
-      with_env("VERSION" => "20100513055502") { invoke("db:migrate") }
+      ) { invoke("db:mongoid:migrate:status") }
+      with_env("VERSION" => "20100513055502") { invoke("db:mongoid:migrate") }
       assert_output(<<-EOF
 
 database: mongoid_test
@@ -53,7 +53,7 @@ database: mongoid_test
    up     20100513055502  AddSecondSurveySchema
   down    20100513063902  AddImprovementPlanSurveySchema
 EOF
-      ) { invoke("db:migrate:status") }
+      ) { invoke("db:mongoid:migrate:status") }
     end
 
 
@@ -68,7 +68,7 @@ database: mongoid_test
   down    20210210125000  DefaultDatabaseMigration
   down    20210210125800  DefaultDatabaseMigrationTwo
 EOF
-      assert_output(output) { invoke("db:migrate:status") }
+      assert_output(output) { invoke("db:mongoid:migrate:status") }
       output = <<-EOF
 
 database: mongoid_test_s1
@@ -79,9 +79,9 @@ database: mongoid_test_s1
   down    20210210125532  ShardDatabaseMigrationTwo
 EOF
 
-      invoke("db:migrate")
+      invoke("db:mongoid:migrate")
       with_env("MONGOID_CLIENT_NAME" => "shard1") do
-        assert_output(output) { invoke("db:migrate:status") }
+        assert_output(output) { invoke("db:mongoid:migrate:status") }
       end
       output = <<-EOF
 
@@ -92,7 +92,7 @@ database: mongoid_test
    up     20210210125000  DefaultDatabaseMigration
    up     20210210125800  DefaultDatabaseMigrationTwo
 EOF
-      assert_output(output) { invoke("db:migrate:status") }
+      assert_output(output) { invoke("db:mongoid:migrate:status") }
       assert_equal(2, DataMigration.count)
       assert_equal(2, SurveySchema.count)
       Mongoid::Migrator.with_mongoid_client("shard1") do
@@ -112,7 +112,7 @@ database: mongoid_test
   down    20210210125000  DefaultDatabaseMigration
   down    20210210125800  DefaultDatabaseMigrationTwo
 EOF
-      assert_output(output) { invoke("db:migrate:status") }
+      assert_output(output) { invoke("db:mongoid:migrate:status") }
       output = <<-EOF
 
 database: mongoid_test_s1
@@ -124,8 +124,8 @@ database: mongoid_test_s1
 EOF
 
       with_env("MONGOID_CLIENT_NAME" => "shard1") do
-        assert_output(output) { invoke("db:migrate:status") }
-        invoke("db:migrate")
+        assert_output(output) { invoke("db:mongoid:migrate:status") }
+        invoke("db:mongoid:migrate")
         output = <<-EOF
 
 database: mongoid_test_s1
@@ -135,7 +135,7 @@ database: mongoid_test_s1
    up     20210210124656  ShardDatabaseMigration
    up     20210210125532  ShardDatabaseMigrationTwo
 EOF
-        assert_output(output) { invoke("db:migrate:status") }
+        assert_output(output) { invoke("db:mongoid:migrate:status") }
       end
       output = <<-EOF
 
@@ -146,7 +146,7 @@ database: mongoid_test
   down    20210210125000  DefaultDatabaseMigration
   down    20210210125800  DefaultDatabaseMigrationTwo
 EOF
-      assert_output(output) { invoke("db:migrate:status") }
+      assert_output(output) { invoke("db:mongoid:migrate:status") }
       assert_equal(0, DataMigration.count)
       Mongoid::Migrator.with_mongoid_client("shard1") do
         assert_equal(2, DataMigration.count)

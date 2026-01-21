@@ -12,17 +12,21 @@ $ rails generate mongoid:migration <your_migration_name_here>
 
 Run migrations:
 ```console
-$ rails db:migrate
-$ rails db:migrate:down VERSION=
-$ rails db:migrate:up VERSION=
-$ rails db:rollback
-$ rails db:rollback_to VERSION=
-$ rails db:migrate:redo
-$ rails db:migrate:reset
-$ rails db:migrate:status
-$ rails db:reseed (handled by mongoid)
-$ rails db:version
+$ rails db:mongoid:migrate
+$ rails db:mongoid:migrate:down VERSION=
+$ rails db:mongoid:migrate:up VERSION=
+$ rails db:mongoid:rollback
+$ rails db:mongoid:rollback_to VERSION=
+$ rails db:mongoid:migrate:redo
+$ rails db:mongoid:migrate:reset
+$ rails db:mongoid:migrate:status
+$ rails db:mongoid:version
 ```
+
+> [!NOTE]  
+> The gem will also bind most tasks to the default `db` namespace (e.g. `db:migrate`) if they are not already defined. This is for better compatibility with existing code and
+tools. It is recommended to use `db:mongoid:migrate` as the preferred option though, for better consistency with Mongoid default tasks, expliciteness and stability (e.g. if
+you add ActiveRecord later).
 
 If you want to use output migration use the hook `after_migrate`
 ```ruby

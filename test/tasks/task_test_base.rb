@@ -5,9 +5,9 @@ load 'lib/mongoid_rails_migrations/mongoid_ext/railties/database.rake'
 module Mongoid
   class TaskTestBase < Minitest::Test #:nodoc:
     def setup
-      invoke("db:drop")
+      invoke("db:mongoid:drop")
       with_env("MONGOID_CLIENT_NAME" => "shard1") do
-        invoke("db:drop")
+        invoke("db:mongoid:drop")
       end
     end
 
